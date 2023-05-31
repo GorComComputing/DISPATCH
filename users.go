@@ -1,37 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
-
-	_ "encoding/json"
-	_ "io/ioutil"
-
-	//"io"
-	_ "log"
-
-	//"os"
-
-	_ "github.com/lib/pq"
-
-	_ "encoding/gob"
-
-	//"strings"
-
-	_ "github.com/gorilla/sessions"
 )
 
-// User from DB
-type UserFromDB struct {
-	Id       int
-	UserName string
-	Login    string
-	Pswd     string
-	UserRole int
-}
-type Users struct {
+// Page fields
+type UsersPage struct {
 	Message  string
 	UserName string
 	BackLink string
@@ -40,36 +16,19 @@ type Users struct {
 
 // Users handler
 func users(w http.ResponseWriter, r *http.Request) {
-	// cookie
-	ses, err := cookieStore.Get(r, cookieName)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	log, ok := ses.Values[sesKeyLogin].(string)
-	if !ok {
-		log = ""
-	}
-
 	// open database
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
+	db := openDB()
 	defer db.Close() // close database
-
-	// check db
-	err = db.Ping()
-	CheckError(err)
-	fmt.Println("PostgreSQL connected OK")
 
 	// select query
 	rows, err := db.Query(`SELECT * FROM users ORDER BY id ASC`)
 	CheckError(err)
 	defer rows.Close()
 
-	var bks Users
+	// Set page fields
+	var bks UsersPage
 	bks.Message = "Message"
-	bks.UserName = log
+	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "users"
 	for rows.Next() {
 		bk := UserFromDB{}
@@ -78,7 +37,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 	}
 	CheckError(err)
 
-	// response template
+	// Response template
 	tmpl, _ := template.ParseFiles("templates/users.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
@@ -86,15 +45,63 @@ func users(w http.ResponseWriter, r *http.Request) {
 
 // Insert user handler
 func insert_user(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	backLink := r.FormValue("backLink")
 
+	name := r.FormValue("name")
+	log := r.FormValue("login")
+	password := r.FormValue("password")
+	role := r.FormValue("role")
+
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// insert hardcoded
+	insertStmt := `insert into "users" ("username", "login", "pswd", "userrole") values($1, $2, $3, $4)`
+	_, e := db.Exec(insertStmt, name, log, password, role)
+	CheckError(e)
+	fmt.Println("Inserted")
+
+	http.Redirect(w, r, backLink, http.StatusSeeOther)
 }
 
 // Delete user handler
 func delete_user(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	id := r.FormValue("id")
 
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// Delete
+	deleteStmt := `delete from "users" where id=$1`
+	_, e := db.Exec(deleteStmt, id)
+	CheckError(e)
+	fmt.Println("Deleted")
+
+	http.Redirect(w, r, "/users", http.StatusSeeOther)
 }
 
 // Update user handler
 func update_user(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	id := r.FormValue("id")
+	name := r.FormValue("name")
+	log := r.FormValue("login")
+	password := r.FormValue("password")
+	role := r.FormValue("role")
 
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// update
+	updateStmt := `update "users" set username=$1, login=$2, pswd=$3, userrole=$4  where id=$5`
+	_, e := db.Exec(updateStmt, name, log, password, role, id)
+	CheckError(e)
+	fmt.Println("Updated")
+
+	http.Redirect(w, r, "/users", http.StatusSeeOther)
 }

@@ -1,24 +1,8 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	_ "html/template"
 	"net/http"
-
-	_ "encoding/json"
-	_ "io/ioutil"
-
-	//"io"
-	_ "log"
-
-	//"os"
-
-	_ "github.com/lib/pq"
-
-	_ "encoding/gob"
-
-	//"strings"
 
 	"github.com/gorilla/sessions"
 )
@@ -45,17 +29,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(log)
 	fmt.Println(pass)
 
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-
 	// open database
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
+	db := openDB()
 	defer db.Close() // close database
-
-	// check db
-	err = db.Ping()
-	CheckError(err)
-	fmt.Println("PostgreSQL connected OK")
 
 	// select query
 	rows, err := db.Query(`SELECT * FROM users`)
@@ -102,4 +78,16 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &c)
 	}
 	http.Redirect(w, r, backLink, http.StatusSeeOther)
+}
+
+// Check Cookies
+func check_cookies(w http.ResponseWriter, r *http.Request) string {
+	ses, err := cookieStore.Get(r, cookieName)
+	CheckErrorHttp(err, w)
+
+	log, ok := ses.Values[sesKeyLogin].(string)
+	if !ok {
+		log = ""
+	}
+	return log
 }

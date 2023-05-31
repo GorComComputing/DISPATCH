@@ -1,52 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
-
-	_ "encoding/json"
-	_ "io/ioutil"
-
-	//"io"
-	_ "log"
-
-	//"os"
-
-	_ "github.com/lib/pq"
-
-	_ "encoding/gob"
-
-	//"strings"
-
-	_ "github.com/gorilla/sessions"
 )
 
-// Event from JSON
-type Event struct {
-	Msg    string // "event"
-	Level  string // "info", "warning", "alarm_on", "alarm_off"
-	Id     string // 1234
-	IP     string // "10.1.10.17"
-	Name   string // "Poveleck"
-	Source string // "system"
-	Event  string // "ref_corr"
-	Body   string // "qqqqqq"
-}
-
-// Event from DB
-type EventFromDB struct {
-	Id         int
-	Level      string
-	Obj_id     int
-	Source     string
-	Event      string
-	Body       string
-	Is_checked bool
-	Time       string
-}
-type Events struct {
+// Page fields
+type EventsPage struct {
 	Message  string
 	UserName string
 	BackLink string
@@ -55,36 +16,19 @@ type Events struct {
 
 // Events handler
 func events(w http.ResponseWriter, r *http.Request) {
-	// cookie
-	ses, err := cookieStore.Get(r, cookieName)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	log, ok := ses.Values[sesKeyLogin].(string)
-	if !ok {
-		log = ""
-	}
-
 	// open database
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
+	db := openDB()
 	defer db.Close() // close database
-
-	// check db
-	err = db.Ping()
-	CheckError(err)
-	fmt.Println("PostgreSQL connected OK")
 
 	// select query
 	rows, err := db.Query(`SELECT * FROM events ORDER BY id ASC`)
 	CheckError(err)
 	defer rows.Close()
 
-	var bks Events
+	// Set page fields
+	var bks EventsPage
 	bks.Message = "Message"
-	bks.UserName = log
+	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "events"
 	for rows.Next() {
 		bk := EventFromDB{}
@@ -93,7 +37,7 @@ func events(w http.ResponseWriter, r *http.Request) {
 	}
 	CheckError(err)
 
-	// response template
+	// Response template
 	tmpl, _ := template.ParseFiles("templates/events.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
@@ -101,15 +45,69 @@ func events(w http.ResponseWriter, r *http.Request) {
 
 // Insert event handler
 func insert_event(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	backLink := r.FormValue("backLink")
 
+	//time := r.FormValue("time")
+	object := r.FormValue("object")
+	level := r.FormValue("level")
+	source := r.FormValue("source")
+	ident := r.FormValue("ident")
+	body := r.FormValue("body")
+	is_check := r.FormValue("is_check")
+
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// insert hardcoded
+	insertStmt := `insert into "events" ("lvl", "obj_id", "src", "evnt", "body", "is_checked") values($1, $2, $3, $4, $5, $6)`
+	_, e := db.Exec(insertStmt, level, object, source, ident, body, is_check)
+	CheckError(e)
+	fmt.Println("Inserted")
+
+	http.Redirect(w, r, backLink, http.StatusSeeOther)
 }
 
 // Delete event handler
 func delete_event(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	id := r.FormValue("id")
 
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// Delete
+	deleteStmt := `delete from "events" where id=$1`
+	_, e := db.Exec(deleteStmt, id)
+	CheckError(e)
+	fmt.Println("Deleted")
+
+	http.Redirect(w, r, "/events", http.StatusSeeOther)
 }
 
 // Update event handler
 func update_event(w http.ResponseWriter, r *http.Request) {
+	// parameters from POST
+	id := r.FormValue("id")
+	//time := r.FormValue("time")
+	object := r.FormValue("object")
+	level := r.FormValue("level")
+	source := r.FormValue("source")
+	ident := r.FormValue("ident")
+	body := r.FormValue("body")
+	is_check := r.FormValue("is_check")
 
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// update
+	updateStmt := `update "events" set lvl=$1, obj_id=$2, src=$3, evnt=$4, body=$5, is_checked=$6  where id=$7`
+	_, e := db.Exec(updateStmt, level, object, source, ident, body, is_check, id)
+	CheckError(e)
+	fmt.Println("Updated")
+
+	http.Redirect(w, r, "/events", http.StatusSeeOther)
 }

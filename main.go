@@ -1,45 +1,25 @@
 package main
 
 import (
-	_ "database/sql"
-	"fmt"
-	_ "html/template"
-	"net/http"
-
-	_ "encoding/json"
-	_ "io/ioutil"
-
-	//"io"
-	"log"
-
-	//"os"
-
-	_ "github.com/lib/pq"
-
 	"encoding/gob"
-
-	//"strings"
-
-	_ "github.com/gorilla/sessions"
+	"fmt"
+	"net/http"
 )
 
-// DB parameters
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "tst_db"
-)
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "ПриветW!")
+	fmt.Printf("ПриветW!")
+}
 
-// Main
 func main() {
+	check_https_serts() // Check HTTPS serts
+
 	gob.Register(sesKey(0))
 
-	fmt.Println("WebServer started OK")
-	fmt.Println("localhost:8080")
-
+	// Page routs
 	http.HandleFunc("/", events)
+
+	http.HandleFunc("/events", events)
 	http.HandleFunc("/insert_event", insert_event)
 	http.HandleFunc("/delete_event", delete_event)
 	http.HandleFunc("/update_event", update_event)
@@ -54,24 +34,21 @@ func main() {
 	http.HandleFunc("/delete_user", delete_user)
 	http.HandleFunc("/update_user", update_user)
 
-	http.HandleFunc("/event", add_event)
-
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
 
-	//путь к папке со внешними файлами: html, js, css, изображения и т.д.
-	fileServer := http.FileServer(http.Dir("scripts/"))
-	http.Handle("/scripts/", http.StripPrefix("/scripts", fileServer))
+	// API routs
+	http.HandleFunc("/event", add_event)
 
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
-}
+	// Resource files routs (js, css)
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
+	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts"))))
 
-// Errors handler
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
+	fmt.Println("WebServer started OK")
+	fmt.Println("Try http://localhost:8080")
+	fmt.Println("or https://localhost:443")
+	go http.ListenAndServeTLS(":443", "cert.pem", "key.pem", nil)
+	http.ListenAndServe(":8080", nil)
+	// for redirect http to https
+	//http.ListenAndServe(":8080", http.HandlerFunc(redirectToHttps))
 }

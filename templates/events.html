@@ -4,42 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Устройства</title>
-    
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-   <!-- Load React. -->
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <!-- Don't use this in production: -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"-->
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/styles.css" rel="stylesheet">
 	
-<style>
-.flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+	<style>
+	myModal.in{
+    z-index: 999999;
 }
-	
-.add {
-    margin-left: 10px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-right: 5px;
-}
-
-.btns {
-    margin-left: 10px;
-}
-
-.table-page {
-	margin-left: 10px;
-}
-</style>
-
+	</style>
 </head>
   
 <body>
+
+  
   
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -149,14 +127,32 @@
       <div class="modal-body">
         <input type="hidden" name="backLink" value={{.BackLink}}>
           <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Название устройства:</label>
-            <!--input type="text" class="form-control" id="recipient-name"-->
-			<input type="text" class="form-control" name="name" id="name" value="" />
+            <label for="recipient-name" class="col-form-label">Время:</label>
+			<input type="text" class="form-control" name="time" id="time" value="" />
           </div>
           <div class="mb-3">
-            <label for="message-text" class="col-form-label">IP адрес:</label>
-			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="" />
-            <!--textarea class="form-control" id="message-text"></textarea-->
+            <label for="message-text" class="col-form-label">Объект:</label>
+			<input type="text" class="form-control" name="object" id="object" value="" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Тип события:</label>
+			<input type="text" class="form-control" name="level" id="level" value="" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Источник:</label>
+			<input type="text" class="form-control" name="source" id="source" value="" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Идентификатор события:</label>
+			<input type="text" class="form-control" name="ident" id="ident" value="" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Детали:</label>
+			<input type="text" class="form-control" name="body" id="body" value="" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Просмотрено:</label>
+			<input type="text" class="form-control" name="is_check" id="is_check" value="" />
           </div>
 		 
       </div>
@@ -177,7 +173,12 @@
 {{end}}
 
 
-  <table class="table table-bordered table-dark table-page">
+
+
+
+
+
+<table class="table table-bordered table-dark table-page">
   <!--thead-->
   <tr>
     <th scope="col">id</th>
@@ -205,8 +206,9 @@
 	
 	
 	<td class="flex">
-	<form action="/delete_event" method="POST">
-	<input type="hidden" name="id" value={{ .Id }}><button class="btn btn-danger btn-sm">Удалить</button></form>
+	<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
+	Удалить
+	</button>
 	
 	<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
 		Изменить
@@ -224,16 +226,34 @@
 	  <form action="/update_event" method="POST">
 	  
       <div class="modal-body">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Название устройства:</label>
-            <!--input type="text" class="form-control" id="recipient-name"-->
+                    <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Время:</label>
 			<input type="hidden" name="id" value={{ .Id }}>
-			<input type="text" class="form-control" name="name" id="name" value="{{ .Name }}" />
+			<input type="text" class="form-control" name="time" id="time" value="{{ .Time }}" />
           </div>
           <div class="mb-3">
-            <label for="message-text" class="col-form-label">IP адрес:</label>
-			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="{{ .IPaddr }}" />
-            <!--textarea class="form-control" id="message-text"></textarea-->
+            <label for="message-text" class="col-form-label">Объект:</label>
+			<input type="text" class="form-control" name="object" id="object" value="{{ .Obj_id }}" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Тип события:</label>
+			<input type="text" class="form-control" name="level" id="level" value="{{ .Level }}" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Источник:</label>
+			<input type="text" class="form-control" name="source" id="source" value="{{ .Source }}" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Идентификатор события:</label>
+			<input type="text" class="form-control" name="ident" id="ident" value="{{ .Event }}" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Детали:</label>
+			<input type="text" class="form-control" name="body" id="body" value="{{ .Body }}" />
+          </div>
+		  <div class="mb-3">
+            <label for="message-text" class="col-form-label">Просмотрено:</label>
+			<input type="text" class="form-control" name="is_check" id="is_check" value="{{ .Is_checked }}" />
           </div>
 		 
       </div>
@@ -245,18 +265,60 @@
     </div>
   </div>
 </div>
+
+
+<!-- Модальное окно УДАЛИТЬ-->
+<div class="modal fade" id="deleteModal{{ .Id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удалить событие?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+	  <form action="/delete_event" method="POST">
+	
+      <div class="modal-body">
+		<label for="message-text" class="col-form-label">Вы действительно хотите удалить событие {{ .Event }} ?</label>
+        <input type="hidden" name="id" value={{ .Id }}>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary">Удалить</button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>
 	
   </tr>
   {{end}}
 </table>  
 
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center pagination-sm">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1">Previous</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+
+
+
 <!-- Дополнительный JavaScript; выберите один из двух! -->
 <!-- Вариант 1: Bootstrap в связке с Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-<!-- Вариант 2: Bootstrap JS отдельно от Popper
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script-->
+<script src="/scripts/bootstrap.bundle.min.js"></script>
+<!-- Вариант 2: Bootstrap JS отдельно от Popper-->
+<!--script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
+
 </body>		
 </html>
