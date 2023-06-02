@@ -11,17 +11,25 @@ type EventsPage struct {
 	Message  string
 	UserName string
 	BackLink string
+	CurPage  int
+	PrevPage int
+	NextPage int
 	Objects  []EventFromDB
 }
 
 // Events handler
 func events(w http.ResponseWriter, r *http.Request) {
+	// Pagination
+	var rowPerPage int = 5
+	page := r.URL.Query().Get("page")
+	page_int, offset := pagination(rowPerPage, page)
+
 	// open database
 	db := openDB()
 	defer db.Close() // close database
 
 	// select query
-	rows, err := db.Query(`SELECT * FROM events ORDER BY id ASC`)
+	rows, err := db.Query(`SELECT * FROM events ORDER BY id ASC LIMIT $1 OFFSET $2`, rowPerPage, offset)
 	CheckError(err)
 	defer rows.Close()
 
@@ -30,6 +38,9 @@ func events(w http.ResponseWriter, r *http.Request) {
 	bks.Message = "Message"
 	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "events"
+	bks.CurPage = page_int
+	bks.PrevPage = page_int - 1
+	bks.NextPage = page_int + 1
 	for rows.Next() {
 		bk := EventFromDB{}
 		rows.Scan(&bk.Id, &bk.Level, &bk.Obj_id, &bk.Source, &bk.Event, &bk.Body, &bk.Is_checked, &bk.Time)

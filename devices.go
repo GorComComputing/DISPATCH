@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 )
 
 // Page fields
@@ -20,19 +19,10 @@ type DevicesPage struct {
 
 // Devices handler
 func devices(w http.ResponseWriter, r *http.Request) {
-
 	// Pagination
 	var rowPerPage int = 5
 	page := r.URL.Query().Get("page")
-	page_int, err := strconv.Atoi(page)
-	CheckError(err)
-	offset := strconv.Itoa((page_int - 1) * rowPerPage)
-	fmt.Println("page =>", page)
-	fmt.Println("offset =>", offset)
-
-	/*1 0
-	2 5
-	3 10*/
+	page_int, offset := pagination(rowPerPage, page)
 
 	// open database
 	db := openDB()

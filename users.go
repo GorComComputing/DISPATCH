@@ -11,17 +11,25 @@ type UsersPage struct {
 	Message  string
 	UserName string
 	BackLink string
+	CurPage  int
+	PrevPage int
+	NextPage int
 	Objects  []UserFromDB
 }
 
 // Users handler
 func users(w http.ResponseWriter, r *http.Request) {
+	// Pagination
+	var rowPerPage int = 5
+	page := r.URL.Query().Get("page")
+	page_int, offset := pagination(rowPerPage, page)
+
 	// open database
 	db := openDB()
 	defer db.Close() // close database
 
 	// select query
-	rows, err := db.Query(`SELECT * FROM users ORDER BY id ASC`)
+	rows, err := db.Query(`SELECT * FROM users ORDER BY id ASC LIMIT $1 OFFSET $2`, rowPerPage, offset)
 	CheckError(err)
 	defer rows.Close()
 
@@ -30,6 +38,9 @@ func users(w http.ResponseWriter, r *http.Request) {
 	bks.Message = "Message"
 	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "users"
+	bks.CurPage = page_int
+	bks.PrevPage = page_int - 1
+	bks.NextPage = page_int + 1
 	for rows.Next() {
 		bk := UserFromDB{}
 		rows.Scan(&bk.Id, &bk.UserName, &bk.Login, &bk.Pswd, &bk.UserRole)
