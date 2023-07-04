@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
+/*func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "ПриветW!")
 	fmt.Printf("ПриветW!")
-}
+}*/
 
 func main() {
 	check_https_serts() // Check HTTPS serts
@@ -45,10 +45,10 @@ func main() {
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts"))))
 
 	fmt.Println("WebServer started OK")
-	fmt.Println("Try http://localhost:8080")
+	fmt.Println("Try http://localhost:8085")
 	fmt.Println("or https://localhost:443")
 	go http.ListenAndServeTLS(":443", "cert.pem", "key.pem", nil)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8085", nil)
 	// for redirect http to https
 	//http.ListenAndServe(":8080", http.HandlerFunc(redirectToHttps))
 }

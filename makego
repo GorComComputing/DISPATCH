@@ -1,2 +1,0 @@
-#!/bin/bash
-go run main.go api.go db.go devices.go errors.go events.go https.go login.go pagination.go users.go
