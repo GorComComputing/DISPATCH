@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Устройства</title>
-	<!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"-->
-	<link href="/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/styles.css" rel="stylesheet">
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Диспетчер СУ</title>
+	<link rel="stylesheet" href="/css/bootstrap.min.css" />
+    	<link rel="stylesheet" href="/css/styles.css" />
 	
-	<!-- Load React. -->
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <!--script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script-->
-    <!-- Don't use this in production: -->
-    <!--script src="https://unpkg.com/@babel/standalone/babel.min.js"></script-->
+    	<link rel="stylesheet" href="terminal/xterm.css" />
+    	<link rel="stylesheet" href="terminal/style.css" />    
 </head>
   
 <body>
@@ -22,7 +17,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
 	<!--img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""-->
-	Устройства</a>
+	Диспетчер СУ</a>
   
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
       <span class="navbar-toggler-icon"></span>
@@ -56,8 +51,8 @@
       </ul>
       
         <!--input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"-->
-		{{if .UserName }}
-		<span class="navbar-text">
+		{{if .UserName}}
+		<span class="navbar-text username">
 		{{ .UserName }}
 		</span>
 		<form class="d-flex table-page" action="/logout" method="POST">
@@ -112,6 +107,8 @@
 <button type="button" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
   Добавить
 </button> 
+
+<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTopTerminal" aria-controls="offcanvasTop">Терминал</button>
 
 
 <!-- Модальное окно ДОБАВИТЬ-->
@@ -180,6 +177,8 @@
 	<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
 		Изменить
 	</button>
+	
+	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Устройство</button>
 	</td>
 	
 <!-- Модальное окно ИЗМЕНИТЬ-->
@@ -245,6 +244,9 @@
 </table>  
 
 
+
+
+
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center pagination-sm">
     <li class="page-item disabled">
@@ -259,13 +261,114 @@
   </ul>
 </nav>
 
-<!-- Дополнительный JavaScript; выберите один из двух! -->
-<!-- Вариант 1: Bootstrap в связке с Popper -->
-<!--script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script-->
+
+
+
+<!-- {{range .Objects}} -->
+<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasTopLabel">Устройство <!-- {{ .Id }} --></h5>
+    
+    <div class="d-flex">  
+	<button id="btnGNSS" class="btn btn-outline-primary btn-sm add">GNSS</button> 
+	<button id="btnNetstat" class="btn btn-outline-primary btn-sm add">Состояние приемника</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Версия и параметры названия</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Настройки сети</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">МАС-адрес и серийный номер</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Конфигурация синхронизации</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Конфигурация PTP</button> 
+	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Данные состояния PTP</button> 
+    </div>  
+    
+    
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+  
+  <div>
+  <table>
+      <tr>
+        <td><textarea rows="25" cols="80" class="usage" id="spar" name="spar"></textarea></td>
+      </tr>
+  </table>
+  </div>
+  
+  <table>
+      <tr>
+      <form id="formKill">
+        <td>PID процесса</td>
+        <td><input id="kpid" name="kpid" class="form-control"></td>
+        <td><button type="submit" class="btn btn-outline-primary btn-sm add">Завершить процесс</button></td>
+      </form>
+      </tr>
+      <tr>
+      <form id="formKillAll">
+        <td>Имя процесса</td>
+        <td><input id="kname" name="kname" class="form-control"></td>
+        <td><button type="submit" class="btn btn-outline-primary btn-sm add">Завершить процесс</button></td>
+      </form>
+      </tr>
+      <tr>
+      <form id="formRunCmd"> 
+        <td>Команда</td>
+        <td><input id="exec" name="exec" class="form-control"></td>
+        <td><button type="submit" class="btn btn-outline-primary btn-sm add">Выполнить команду</button></td>
+      </form>
+      </tr>
+      <tr></tr>
+      <tr></tr>
+  </table>
+  
+
+
+   
+  </div>
+  
+</div>
+<!-- {{end}} -->
+
+
+
+
+
+<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTopTerminal" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasTopLabel">Терминал</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body d-flex">
+  
+  
+<div id="terminal-container"></div>
+<script defer src="/scripts/terminal.js"></script>
+
+   
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script src="terminal/xterm.js"></script>
+<script src="terminal/attach.js"></script>
+<script src="terminal/fit.js"></script>
+
+<script src="/scripts/longpoll.js"></script>
+
 <script src="/scripts/bootstrap.bundle.min.js"></script>
-<!-- Вариант 2: Bootstrap JS отдельно от Popper
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
--->
+<script src="/scripts/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script>  
+
+<script src="/scripts/buttons.js"></script>
+	
+<script src="/scripts/messages.js"></script>
+
 </body>	
 </html>

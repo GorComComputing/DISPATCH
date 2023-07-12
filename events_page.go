@@ -49,7 +49,7 @@ func events(w http.ResponseWriter, r *http.Request) {
 	CheckError(err)
 
 	// Response template
-	tmpl, _ := template.ParseFiles("templates/events.html")
+	tmpl, _ := template.ParseFiles("www/events.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
 }
