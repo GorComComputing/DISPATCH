@@ -6,6 +6,9 @@ import (
 	"log"
 	"strings"
 	"encoding/gob"
+	
+    	"os"
+    	"bufio"
 )
 
 
@@ -13,39 +16,40 @@ type Handler struct {
 	fileServer http.Handler
 }
 
+var exit_status bool = true	// false = exit
+
 
 func main() {
+	var cmd_line string
+	var words = make([]string, len(os.Args)-1)
+
+	// pars command line args
+	if len(os.Args) > 1 {
+
+		// TUI mode
+		if os.Args[1] == "-w"{
+                        fmt.Println("Window")
+                        os.Exit(0)
+                }
+
+        	copy(words[0:], os.Args[1:])
+                exit_status = false
+                
+        	out := interpretator(words)
+		if len(out) > 0 {
+			fmt.Print(out)
+		}
+        	
+		os.Exit(0)
+	}
+
+
+
+
+
 	check_https_serts() // Check HTTPS serts
 
 	gob.Register(sesKey(0))
-
-	// Page routs
-	/*http.HandleFunc("/", events)
-
-	http.HandleFunc("/events", events)
-	http.HandleFunc("/insert_event", insert_event)
-	http.HandleFunc("/delete_event", delete_event)
-	http.HandleFunc("/update_event", update_event)
-
-	http.HandleFunc("/devices", devices)
-	http.HandleFunc("/insert_device", insert_device)
-	http.HandleFunc("/delete_device", delete_device)
-	http.HandleFunc("/update_device", update_device)
-
-	http.HandleFunc("/users", users)
-	http.HandleFunc("/insert_user", insert_user)
-	http.HandleFunc("/delete_user", delete_user)
-	http.HandleFunc("/update_user", update_user)
-
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", logout)
-
-	// API routs
-	http.HandleFunc("/event", add_event)*/
-
-	// Resource files routs (js, css)
-	//http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
-	//http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts"))))
 
 	fmt.Println("WebServer started OK")
 	fmt.Println("Try http://localhost:8085")
@@ -55,9 +59,30 @@ func main() {
 	// for redirect http to https
 	//http.ListenAndServe(":8080", http.HandlerFunc(redirectToHttps))
 	
-	http.ListenAndServe(":8085", &Handler{
+	go http.ListenAndServe(":8085", &Handler{
 		fileServer: http.FileServer(http.Dir("www")),
 	})
+	
+	// start shell
+	for exit_status {
+		fmt.Print("WS> ")
+		// ввод строки с пробелами
+    		scanner := bufio.NewScanner(os.Stdin)
+    		scanner.Scan()
+    		cmd_line = scanner.Text()
+    		// разбиение на подстроки по пробелу
+    		words = strings.Fields(cmd_line)
+
+		out := interpretator(words)
+		if len(out) > 0 {
+			fmt.Print(out)
+		}
+	}
+}
+
+func cmd_quit(words []string) string {
+	exit_status = false
+	return ""
 }
 
 
@@ -72,6 +97,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	
 	if strings.Trim(r.URL.Path, "/") == "" {
 		events(w, r)
+		return
+	}
+	
+	if strings.Trim(r.URL.Path, "/") == "api" {
+		http_pars(w, r)
 		return
 	}
 	

@@ -1,6 +1,7 @@
 		$(document).ready(function(){
 			var Protocol = window.location.protocol;
 			var Host = window.location.hostname;
+			var Port = window.location.port;
 			
 			$('#formDeleteUser1').submit(function(){
 				$.ajax({
@@ -20,8 +21,7 @@
 			$('#formRunCmd').submit(function(){
 				$.ajax({
 					type: "POST",
-					//url: "/save",
-					url: Protocol+"//"+Host+":8084/api",
+					url: Protocol+"//"+Host+":"+Port+"/api",
 					data: "cmd=run "+$("#exec").val(),
 					success: function(html){
 						$("#spar").val(html);
@@ -259,16 +259,21 @@
 			
 			////////////////////////////////////////////////////////////////
 			
-			$('#btnGNSS').on('click',  function(){
+			$('.btnCurl').on('click',  function(){
+				var addId = $(this).attr('btnId');
+				var addIP = $(this).attr('btnIP');
+				var addCmd = $(this).attr('btnCmd');
 				$.ajax({
 					type: "POST",
-					url: "http://192.168.1.206/cgi-bin/configs.cgi?",
-					data: "cmd=getgnss",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=curl "+addCmd+" http://"+addIP+"/cgi-bin/configs.cgi?",
 					success: function(html){
-    						$("#spar").val(html);
+    						$("#spar"+addId).val(html);
 				   	}
 				});
 				return false;
 			});
+			
+	
 			
 		});

@@ -178,7 +178,7 @@
 		Изменить
 	</button>
 	
-	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Устройство</button>
+	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop{{ .Id }}" aria-controls="offcanvasTop">Устройство</button>
 	</td>
 	
 <!-- Модальное окно ИЗМЕНИТЬ-->
@@ -264,50 +264,36 @@
 
 
 
-<!-- {{range .Objects}} -->
-<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+{{range .Objects}}
+<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTop{{ .Id }}" aria-labelledby="offcanvasTopLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasTopLabel">Устройство <!-- {{ .Id }} --></h5>
-    
-    <div class="d-flex">  
-	<button id="btnGNSS" class="btn btn-outline-primary btn-sm add">GNSS</button> 
-	<button id="btnNetstat" class="btn btn-outline-primary btn-sm add">Состояние приемника</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Версия и параметры названия</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Настройки сети</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">МАС-адрес и серийный номер</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Конфигурация синхронизации</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Конфигурация PTP</button> 
-	<button id="btnNtpq" class="btn btn-outline-primary btn-sm add">Данные состояния PTP</button> 
-    </div>  
-    
-    
+    <h5 id="offcanvasTopLabel">{{ .Name }}</h5>
+
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
   
-  <div>
+  <div class="d-flex">
   <table>
       <tr>
-        <td><textarea rows="25" cols="80" class="usage" id="spar" name="spar"></textarea></td>
+        <td><textarea rows="25" cols="80" class="usage" id="spar{{ .Id }}"></textarea></td>
       </tr>
   </table>
+  
+  <div>
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getgnss">GNSS</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="stgpsmon">Состояние приемника</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getver">Версия и параметры названия</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getconfig">Настройки сети</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getmac">МАС-адрес и серийный номер</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getsync">Конфигурация синхронизации</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptp">Конфигурация PTP</button></div> 
+	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptpdata">Данные состояния PTP</button></div> 
+    </div>
+  
   </div>
   
   <table>
-      <tr>
-      <form id="formKill">
-        <td>PID процесса</td>
-        <td><input id="kpid" name="kpid" class="form-control"></td>
-        <td><button type="submit" class="btn btn-outline-primary btn-sm add">Завершить процесс</button></td>
-      </form>
-      </tr>
-      <tr>
-      <form id="formKillAll">
-        <td>Имя процесса</td>
-        <td><input id="kname" name="kname" class="form-control"></td>
-        <td><button type="submit" class="btn btn-outline-primary btn-sm add">Завершить процесс</button></td>
-      </form>
-      </tr>
       <tr>
       <form id="formRunCmd"> 
         <td>Команда</td>
@@ -325,7 +311,7 @@
   </div>
   
 </div>
-<!-- {{end}} -->
+{{end}}
 
 
 
