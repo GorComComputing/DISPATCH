@@ -27,9 +27,12 @@ type UserFromDB struct {
 
 // Object from DB
 type ObjectFromDB struct {
-	Name   string
-	IPaddr string
-	Id     int
+	Version string
+	Name   	string
+	IPaddr 	string
+	Id     	int
+	GNSS	 bool
+	PTP	 bool
 }
 
 // Event from DB

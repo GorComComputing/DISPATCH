@@ -20,7 +20,7 @@ type DevicesPage struct {
 // Devices handler
 func devices(w http.ResponseWriter, r *http.Request) {
 	// Pagination
-	var rowPerPage int = 5
+	var rowPerPage int = 10
 	page := r.URL.Query().Get("page")
 	page_int, offset := pagination(rowPerPage, page)
 
@@ -43,7 +43,23 @@ func devices(w http.ResponseWriter, r *http.Request) {
 	bks.NextPage = page_int + 1
 	for rows.Next() {
 		bk := ObjectFromDB{}
-		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr)
+		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version)
+		IPaddr := "192.168.1.206"
+		var words = []string{"curl", "getsync", "http://" + IPaddr + "/cgi-bin/configs.cgi?"}  
+		_, result := curl(words)
+	
+		if result != nil{
+		gnss := fmt.Sprintf("%v", result["gnss"])
+		if gnss == "ON" {bk.GNSS = true}
+		ptp := fmt.Sprintf("%v", result["ptp"])
+		if ptp == "ON" {bk.PTP = true}
+		} else {
+		bk.GNSS = false
+		bk.PTP = false
+		}
+		
+
+		
 		bks.Objects = append(bks.Objects, bk)
 	}
 	CheckError(err)

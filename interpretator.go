@@ -6,13 +6,16 @@ import (
 
 
 // Command list for interpretator
-var cmd =  map[string]func([]string)string{
+var cmd =  map[string]func([]string) string {
 	"tst": cmd_tst,
 	"ls": cmd_ls,
 	"quit": cmd_quit,
 	"run": cmd_run,
 	
 	"curl": cmd_curl,
+	"curlp": cmd_curlp,
+	
+	"updatedev": cmd_updatedev,
 	
 
 }

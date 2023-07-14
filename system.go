@@ -71,9 +71,43 @@ type Payload struct {
 	Cmd string `json:"cmd"`
 }
 
-// Тестовая команда curl
+
+// команда curl
 func cmd_curl(words []string) string {
 	var output string
+
+	_, result := curl(words)
+	
+	for key, val := range result {
+		str := fmt.Sprintf("%v", val)
+		output += string(key) + ": " + str + "\n"
+	}
+
+	/* output, res := curl(words)
+	
+	str := fmt.Sprintf("%v", res["mode"])
+	output += "\n" + str */
+
+	return output 
+}
+
+// команда curlp - возвращает набор параметров
+func cmd_curlp(words []string) string {
+	var output string
+
+	output, _ = curl(words)
+	
+	/*str := fmt.Sprintf("%v", result["mode"])
+	output += "\n" + str*/
+
+	return output 
+}
+
+// полная функция curl (возвращает string и map)
+func curl(words []string) (string, map[string]any) {
+	var output string
+	var result map[string]any
+	
 	data := Payload{words[1]} //"getconfig"
 	
 	payloadBytes, err := json.Marshal(data)
@@ -98,11 +132,48 @@ func cmd_curl(words []string) string {
 	body_resp, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		output = "Request FAIL: " + err.Error() + "\n"
-		return output
+		return output, nil
 	}
-
+	
+	json.Unmarshal(body_resp, &result)
+	
+	/*for key, val := range result {
+		str := fmt.Sprintf("%v", val)
+		output += string(key) + ": " + str + "\n"
+	}*/
+	
 	output = string(body_resp)
-	return output 
+
+	return output, result 
+}
+
+// Update device handler
+func cmd_updatedev(words []string) string{
+	var output string
+	// parameters from POST
+	id := words[1]
+	name := words[2]
+	version := words[3]
+	//ipaddr := r.FormValue("ipaddr")
+
+	fmt.Println(words)
+	//fmt.Println(name)
+	//fmt.Println(ipaddr)
+
+	// open database
+	db := openDB()
+	defer db.Close() // close database
+
+	// update
+	updateStmt := `update "objects" set objectname=$1, version=$2 where id=$3`
+	_, e := db.Exec(updateStmt, name, version, id)
+	CheckError(e)
+	fmt.Println("Updated")
+
+	//http.Redirect(w, r, "/devices", http.StatusSeeOther)
+	output = "Updated"
+	
+	return output
 }
 
 

@@ -274,6 +274,125 @@
 				return false;
 			});
 			
+			
+			$('.btnStatusCurl').on('click',  function(){
+				var addId = $(this).attr('btnId');
+				var addIP = $(this).attr('btnIP');
+				
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=curlp getver http://"+addIP+"/cgi-bin/configs.cgi?",
+					async: false,
+					success: function(html){
+						const obj = JSON.parse(html);
+				
+						$("#offcanvasTopLabel"+addId).empty();
+						$("#offcanvasTopLabel"+addId).prepend(obj.devicename);
+						
+						$("#ipaddr"+addId).empty();
+						$("#ipaddr"+addId).prepend(addIP);
+						
+						$("#status"+addId).empty();
+						$("#status"+addId).prepend(obj.mode);
+						
+						$("#version"+addId).empty();
+    						$("#version"+addId).prepend(obj.softversion);
+				   	}
+				});
+				
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=curlp getsync http://"+addIP+"/cgi-bin/configs.cgi?",
+					async: false,
+					success: function(html){
+						const obj = JSON.parse(html);
+				
+						/*$("#gnss"+addId).empty();
+						$("#gnss"+addId).prepend(obj.gnss);
+			
+						$("#ptp"+addId).empty();
+						$("#ptp"+addId).prepend(obj.ptp);*/
+
+						$("#mesg"+addId).empty();
+						if (obj.ptp == "ON") {
+							$("#mesg"+addId).prepend("&nbsp; ptp &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>");
+						} else {
+							$("#mesg"+addId).prepend("&nbsp; ptp &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>");
+						}
+						
+						if (obj.gnss == "ON") {
+							$("#mesg"+addId).prepend("gnss &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>");
+						} else {
+							$("#mesg"+addId).prepend("gnss &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>");
+						}
+
+				   	}
+				});
+
+				return false;
+			});
+			
+			
+			$('.btnBaseCurl').on('click',  function(){
+				var addId = $(this).attr('btnId');
+				var addIP = $(this).attr('btnIP');
+				var addName = "";
+				var addVersion = "";
+				
+				response = $.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=curlp getver http://"+addIP+"/cgi-bin/configs.cgi?",
+					async: false,
+					success: function(html){
+
+				   	}
+				}).responseText;
+				//console.log(response);
+				
+				const obj = JSON.parse(response);
+				
+						$("#offcanvasTopLabel"+addId).empty();
+						$("#offcanvasTopLabel"+addId).prepend(obj.devicename);
+						
+						$("#ipaddr"+addId).empty();
+						$("#ipaddr"+addId).prepend(addIP);
+						
+						$("#status"+addId).empty();
+						$("#status"+addId).prepend(obj.mode);
+						
+						$("#ptp"+addId).empty();
+						$("#ptp"+addId).prepend(obj.ptp);
+						
+						$("#version"+addId).empty();
+    						$("#version"+addId).prepend(obj.softversion);
+    						
+    						addVersion = obj.softversion;
+    						addName = obj.devicename.replace(/\s/g,'_');
+    						
+    						
+    						//var addNameStr = addName;
+						//console.log(addNameStr= addNameStr.replace(/\s/g,''));
+    						
+				//console.log(addNameStr);
+				
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=updatedev " + addId + " " + addName + " " + addVersion,
+					async: false,
+					success: function(html){
+						$("#spar"+addId).val('Параметры сохранены в базе');
+				   	}
+				});
+				
+				return false;
+			});
+			
+			
+			
 	
 			
 		});
