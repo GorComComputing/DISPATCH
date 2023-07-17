@@ -110,7 +110,7 @@
 
 <button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTopTerminal" aria-controls="offcanvasTop">Терминал</button>
 
-<button class="btn btn-outline-primary btn-sm add" type="button">Обновить</button>
+<button id="btnRefresh" class="btn btn-outline-primary btn-sm add" type="button">Обновить</button>
 
 
 <!-- Модальное окно ДОБАВИТЬ-->
@@ -172,7 +172,7 @@
     <!--td>{{ .Id }}</td-->
     <td width="50px">
     
-    <div id="mesg" style="margin-right: 10px; line-height: 2; text-align: center;">
+    <div id="mesg_base{{ .Id }}" style="margin-right: 10px; line-height: 2; text-align: center;">
 {{ if .GNSS }}
         <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
      {{ else }}  

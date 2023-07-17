@@ -44,20 +44,26 @@ func devices(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		bk := ObjectFromDB{}
 		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version)
-		IPaddr := "192.168.1.206"
-		var words = []string{"curl", "getsync", "http://" + IPaddr + "/cgi-bin/configs.cgi?"}  
+		var words = []string{"curl", "getsync", "http://" + bk.IPaddr + "/cgi-bin/configs.cgi?"}  
 		_, result := curl(words)
 	
 		if result != nil{
-		gnss := fmt.Sprintf("%v", result["gnss"])
-		if gnss == "ON" {bk.GNSS = true}
-		ptp := fmt.Sprintf("%v", result["ptp"])
-		if ptp == "ON" {bk.PTP = true}
+			gnss := fmt.Sprintf("%v", result["gnss"])
+			if gnss == "ON" {
+				bk.GNSS = true
+			} else {
+				bk.GNSS = false
+			}
+			ptp := fmt.Sprintf("%v", result["ptp"])
+			if ptp == "ON" {
+				bk.PTP = true
+			} else {
+				bk.PTP = false
+			}
 		} else {
-		bk.GNSS = false
-		bk.PTP = false
+			bk.PTP = false
+			bk.GNSS = false
 		}
-		
 
 		
 		bks.Objects = append(bks.Objects, bk)

@@ -19,6 +19,7 @@ func cmd_tst(words []string) string {
 	return ""
 }
 
+
 func cmd_ls(words []string) string {
 	if len(words) < 2 {
 		fmt.Println("Too little parameters")
@@ -76,11 +77,14 @@ type Payload struct {
 func cmd_curl(words []string) string {
 	var output string
 
-	_, result := curl(words)
+	output, result := curl(words)
 	
-	for key, val := range result {
-		str := fmt.Sprintf("%v", val)
-		output += string(key) + ": " + str + "\n"
+	if output != "Request FAIL\n" {
+		output = ""
+		for key, val := range result {
+			str := fmt.Sprintf("%v", val)
+			output += string(key) + ": " + str + "\n"
+		}
 	}
 
 	/* output, res := curl(words)
@@ -91,8 +95,8 @@ func cmd_curl(words []string) string {
 	return output 
 }
 
-// команда curlp - возвращает набор параметров
-func cmd_curlp(words []string) string {
+// команда curls - возвращает набор параметров
+func cmd_curls(words []string) string {
 	var output string
 
 	output, _ = curl(words)
@@ -119,19 +123,22 @@ func curl(words []string) (string, map[string]any) {
 
 	req, err := http.NewRequest("POST", words[2], body) //"http://192.168.1.206/cgi-bin/configs.cgi?"
 	if err != nil {
-		// handle err
+		output = "Request FAIL\n"
+		return output, nil
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
+
 	if err != nil {
-		// handle err
+		output = "Request FAIL\n"
+		return output, nil
 	}
 	defer resp.Body.Close()
 
 	body_resp, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		output = "Request FAIL: " + err.Error() + "\n"
+		output = "Request FAIL\n"
 		return output, nil
 	}
 	
@@ -170,7 +177,6 @@ func cmd_updatedev(words []string) string{
 	CheckError(e)
 	fmt.Println("Updated")
 
-	//http.Redirect(w, r, "/devices", http.StatusSeeOther)
 	output = "Updated"
 	
 	return output

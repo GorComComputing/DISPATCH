@@ -28,6 +28,54 @@ func http_pars(w http.ResponseWriter, r *http.Request) {
 			}
   		}
 	}
+	
+	
+	/*for _, val := range words {
+    			fmt.Println(val)
+		}*/
+	
+	
+		isUnion := false
+    		union := ""
+    		var count []int
+    		var length []int
+    		var Unions []string
+    		for i, val := range words {
+    			if (val[0] == 39 && val[len(val)-1] != 39) || (val[0] == 39 && len(val) == 1) && isUnion != true {
+    				isUnion = true
+    				union += val[1:] + " "
+    				count = append(count, i)
+    				continue
+    			}
+    			if val[len(val)-1] != 39 && isUnion == true {
+    				union += val + " "
+    				continue
+    			}
+    			if val[len(val)-1] == 39 {
+    				isUnion = false
+    				union += val[:len(val)-1]
+    				length = append(length, i - count[len(count)-1])
+    				Unions = append(Unions, union)
+    				union = ""
+    				continue
+    			}
+    		}
+    		
+    		
+    		x := 0
+    		for i, val := range count {
+    			words[val+x] = Unions[i] 
+    			copy(words[val+x+1:], words[val+length[i]+1:])
+    			x -= length[i]
+		}
+		words = words[:len(words)+x]
+		
+		/*for _, val := range words {
+    			fmt.Println("-"+val)
+		}*/
+	
+	
+	
 	out := interpretator(words)
 	if len(out) > 0 {
 		fmt.Fprintf(w, out)

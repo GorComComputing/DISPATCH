@@ -16,12 +16,15 @@ type Handler struct {
 	fileServer http.Handler
 }
 
-var exit_status bool = true	// false = exit
-
 
 func main() {
 	var cmd_line string
 	var words = make([]string, len(os.Args)-1)
+	
+	// Copy from the original map of command to the ptint map of command
+	for key, value := range cmd {
+  		cmd_print[key] = value
+	}
 
 	// pars command line args
 	if len(os.Args) > 1 {
@@ -33,7 +36,6 @@ func main() {
                 }
 
         	copy(words[0:], os.Args[1:])
-                exit_status = false
                 
         	out := interpretator(words)
 		if len(out) > 0 {
@@ -43,14 +45,13 @@ func main() {
 		os.Exit(0)
 	}
 
-
-
-
-
-	check_https_serts() // Check HTTPS serts
-
+	// Check HTTPS serts
+	check_https_serts() 
+	
+	// for cookies (authorisation)
 	gob.Register(sesKey(0))
 
+	// start web server
 	fmt.Println("WebServer started OK")
 	fmt.Println("Try http://localhost:8085")
 	fmt.Println("or https://localhost:443")
@@ -64,7 +65,7 @@ func main() {
 	})
 	
 	// start shell
-	for exit_status {
+	for {  // exit_status
 		fmt.Print("WS> ")
 		// ввод строки с пробелами
     		scanner := bufio.NewScanner(os.Stdin)
@@ -72,17 +73,60 @@ func main() {
     		cmd_line = scanner.Text()
     		// разбиение на подстроки по пробелу
     		words = strings.Fields(cmd_line)
+    		
+    		isUnion := false
+    		union := ""
+    		var count []int
+    		var length []int
+    		var Unions []string
+    		for i, val := range words {
+    			if (val[0] == '"' && val[len(val)-1] != '"') || (val[0] == '"' && len(val) == 1) && isUnion != true {
+    				isUnion = true
+    				union += val + " "
+    				count = append(count, i)
+    				continue
+    			}
+    			if val[len(val)-1] != '"' && isUnion == true {
+    				union += val + " "
+    				//count = append(count, i)
+    				continue
+    			}
+    			if val[len(val)-1] == '"' {
+    				isUnion = false
+    				union += val
+    				//count = append(count, i)
+    				length = append(length, i - count[len(count)-1])
+    				
+    				Unions = append(Unions, union)
+    				union = ""
+    				continue
+    			}
+    		}
+    		
+    		//fmt.Println(union)
+    		//fmt.Println(count)
+    		//fmt.Println(length)
+    		//fmt.Println(Unions)
+    		
+    		x := 0
+    		for i, val := range count {
+    			words[val+x] = Unions[i] 
+    			copy(words[val+x+1:], words[val+length[i]+1:])
+    			x -= length[i]
+		}
+		words = words[:len(words)+x]
+		
+		//for _, val := range words {
+    		//	fmt.Println(val)
+		//}
+    		
+    		
 
 		out := interpretator(words)
 		if len(out) > 0 {
 			fmt.Print(out)
 		}
 	}
-}
-
-func cmd_quit(words []string) string {
-	exit_status = false
-	return ""
 }
 
 
