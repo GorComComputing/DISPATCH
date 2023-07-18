@@ -450,5 +450,5 @@
 		}
 		
 		// Запрос статуса GNSS/PTP каждый 25 сек		
-		setInterval(function() {reqStatusGNSS_PTP("192.168.1.206", "3")}, 25000);
+		//setInterval(function() {reqStatusGNSS_PTP("192.168.1.206", "3")}, 25000);
 
