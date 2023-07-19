@@ -33,6 +33,7 @@ type ObjectFromDB struct {
 	Id     	int
 	GNSS	 bool
 	PTP	 bool
+	PZG_VZG string
 }
 
 // Event from DB

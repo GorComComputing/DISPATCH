@@ -140,7 +140,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	if strings.Trim(r.URL.Path, "/") == "" {
-		events(w, r)
+		//events(w, r)
+		devices(w, r)
 		return
 	}
 	

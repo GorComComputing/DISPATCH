@@ -299,7 +299,7 @@
 						const obj = JSON.parse(html);
 										
 						$("#offcanvasTopLabel"+addId).empty();
-						$("#offcanvasTopLabel"+addId).prepend(obj.devicename);
+						$("#offcanvasTopLabel"+addId).prepend(obj.description);
 						
 						$("#ipaddr"+addId).empty();
 						$("#ipaddr"+addId).prepend(addIP);
@@ -347,8 +347,10 @@
 				
 				const obj = JSON.parse(response);
 				
+						//console.log(obj.description);
+				
 						$("#offcanvasTopLabel"+addId).empty();
-						$("#offcanvasTopLabel"+addId).prepend(obj.devicename);
+						$("#offcanvasTopLabel"+addId).prepend(obj.description);
 						
 						$("#ipaddr"+addId).empty();
 						$("#ipaddr"+addId).prepend(addIP);
@@ -363,13 +365,18 @@
     						$("#version"+addId).prepend(obj.softversion);
     						
     						addVersion = obj.softversion;
-    						addName = obj.devicename;//.replace(/\s/g,'_');
-    						
+    						addName = obj.description;//.replace(/\s/g,'_');
+    						if (addName.includes(' ') ) {
+    							data_str = "cmd=updatedev " + addId + " '" + addName + "' " + addVersion;
+						} else {
+    							data_str = "cmd=updatedev " + addId + " " + addName + " " + addVersion;
+						}
+				
 				
 				$.ajax({
 					type: "POST",
 					url: Protocol+"//"+Host+":"+Port+"/api",
-					data: "cmd=updatedev " + addId + " '" + addName + "' " + addVersion,
+					data: data_str,
 					async: false,
 					success: function(html){
 						console.log(html);
@@ -402,7 +409,7 @@
 					type: "POST",
 					url: Protocol+"//"+Host+":"+Port+"/api",
 					data: "cmd=curls getsync http://"+addIP+"/cgi-bin/configs.cgi?",
-					async: false,
+					async: true,
 					success: function(html){
 						if (html == "Request FAIL\n"){
 							$("#spar"+addId).val("Error: Устройство " + addIP + " не отвечает");
@@ -447,8 +454,65 @@
 				        }
 
 				});
+				
+				
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":"+Port+"/api",
+					data: "cmd=curls getgenerator http://"+addIP+"/cgi-bin/configs.cgi?",
+					async: true,
+					success: function(html){
+						if (html == "Request FAIL\n"){
+							$("#gnss_ref"+addId).empty();
+							$("#gnss_ref"+addId).prepend("-=[none]=-");
+							$("#ptp_ref"+addId).empty();
+							$("#ptp_ref"+addId).prepend("-=[none]=-");
+							return;
+						}
+						const obj = JSON.parse(html);
+						if (obj.gnssref == ""){
+							gnssref = "NA"
+						} else {
+							gnssref = obj.gnssref
+						}
+						if (obj.ptpref == ""){
+							ptpref = "NA"
+						} else {
+							ptpref = obj.ptpref
+						}
+						
+						$("#gnss_ref"+addId).empty();
+						$("#gnss_ref"+addId).prepend(gnssref);
+						$("#ptp_ref"+addId).empty();
+						$("#ptp_ref"+addId).prepend(ptpref);
+				
+				
+					},
+				   	error: function(xhr, status, error){
+                				$("#gnss_ref"+addId).empty();
+						$("#gnss_ref"+addId).prepend("-=[none]=-");
+						$("#ptp_ref"+addId).empty();
+						$("#ptp_ref"+addId).prepend("-=[none]=-");
+				        }
+				
+				});
 		}
 		
-		// Запрос статуса GNSS/PTP каждый 25 сек		
-		//setInterval(function() {reqStatusGNSS_PTP("192.168.1.206", "3")}, 25000);
-
+		// Запрос статуса GNSS/PTP каждый 15 сек		
+		setInterval(function() {
+			reqStatusGNSS_PTP("10.1.10.17", "3");
+			reqStatusGNSS_PTP("10.1.10.4", "25");
+			reqStatusGNSS_PTP("10.1.10.6", "47");
+			reqStatusGNSS_PTP("10.1.10.12", "48");
+			reqStatusGNSS_PTP("10.1.10.250", "63");
+			reqStatusGNSS_PTP("10.1.10.251", "64");
+		}, 15000);
+		
+		
+/*		reqStatusGNSS_PTP("10.1.10.17", "3");
+		reqStatusGNSS_PTP("10.1.10.4", "25");
+		reqStatusGNSS_PTP("10.1.10.6", "47");
+		reqStatusGNSS_PTP("10.1.10.12", "48");
+		reqStatusGNSS_PTP("10.1.10.250", "63");
+		reqStatusGNSS_PTP("10.1.10.251", "64");
+*/

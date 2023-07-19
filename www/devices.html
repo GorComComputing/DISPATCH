@@ -159,7 +159,10 @@
   <tr>
     <!--th scope="col">id</th-->
     <th scope="col">gnss/ptp</th>
+    <th scope="col">Режим</th>
     <th scope="col">Название</th>
+    <th scope="col">gnss ref</th>
+    <th scope="col">ptp ref</th>
     <th scope="col">IP адрес</th>
     <th scope="col">Версия прошивки</th>
     <th scope="col"></th>
@@ -190,25 +193,31 @@
     </div>
     
     </td>
+     <td style="text-transform:uppercase" width="50px">{{ .PZG_VZG }}</td>
     <td class="name">{{ .Name }}</td>
-    <td class="ipaddr">{{ .IPaddr }}</td>
-    <td class="version">{{ .Version }}</td>
+    <td id="gnss_ref{{ .Id }}"></td>
+    <td id="ptp_ref{{ .Id }}"></td>
+    <td class="ipaddr" width="70px">{{ .IPaddr }}</td>
+    <td class="version" width="170px">{{ .Version }}</td>
 	
 	<td class="flex">
-	<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
-	Удалить
-	</button>
 	
-	<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
-		Изменить IP-адрес
-	</button>
+	<a class="btn btn-warning btn-sm add" href="http://{{ .IPaddr }}/index.html" target="_blank" role="button">Menu</a>
+  	<a class="btn btn-outline-warning btn-sm add" href="http://{{ .IPaddr }}/sync.html" target="_blank" role="button">Sync</a>
+  	<a class="btn btn-outline-warning btn-sm add" href="http://{{ .IPaddr }}/ptp{{ .PZG_VZG }}.html" target="_blank" role="button">PTP</a>
+  	<a class="btn btn-outline-warning btn-sm add" href="http://{{ .IPaddr }}/gnss.html" target="_blank" role="button">GNSS</a>
+	
 	
 	<button class="btn btn-outline-primary btn-sm add btnStatusCurl" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop{{ .Id }}" aria-controls="offcanvasTop" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">Debug</button>
 	
-	<a href="http://{{ .IPaddr }}/index.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">Menu</button></a>
-	<a href="http://{{ .IPaddr }}/sync.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">Sync</button></a>
-	<a href="http://{{ .IPaddr }}/ptppzg.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">PTP</button></a>
-	<a href="http://{{ .IPaddr }}/gnss.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">GNSS</button></a>
+
+	<!--button type="button" class="btn btn-primary btns btn-sm add" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
+		Изменить IP-адрес
+	</button>
+	
+	<button type="button" class="btn btn-danger btn-sm add" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
+	Удалить
+	</button-->
 	</td>
 	
 <!-- Модальное окно ИЗМЕНИТЬ-->
@@ -294,40 +303,33 @@
 
 
 {{range .Objects}}
-<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTop{{ .Id }}" aria-labelledby="offcanvasTopLabel">
+<div class="offcanvas offcanvas-top bg-black text-white" style="height: 80vh" tabindex="-1" id="offcanvasTop{{ .Id }}" aria-labelledby="offcanvasTopLabel">
   <div class="offcanvas-header">
   <div class="d-flex"> 
 
     <h5 id="offcanvasTopLabel{{ .Id }}">{{ .Name }}</h5>
     
-    <button class="btn btn-outline-primary btn-sm add btnBaseCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getver">Обновить в базе</button>
-    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">Изменить IP-адрес</button>
-    <button type="button" class="btn btn-danger btns btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">Удалить</button>
+    <button class="btn btn-outline-warning btn-sm add btnBaseCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getver">Обновить в базе</button>
+    <button type="button" class="btn btn-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">Изменить IP-адрес</button>
+    <button type="button" class="btn btn-danger btns btn-sm add" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">Удалить</button>
 </div>
 
 
 
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="btn btn-outline-secondary btns btn-sm add text-reset" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
   </div>
   
   <div class="offcanvas-body">
+  
   <div class="d-flex">
+  <div>
+  
   <div id="mesg{{ .Id }}" style="margin-right: 10px; line-height: 2">
-
         gnss &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg> &nbsp; 
-
     	ptp &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
-    </div>
+  </div>
     
-      	<div>
-  	<a href="http://{{ .IPaddr }}/index.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">Menu</button></a>
-	<a href="http://{{ .IPaddr }}/sync.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">Sync</button></a>
-	<a href="http://{{ .IPaddr }}/ptppzg.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">PTP</button></a>
-	<a href="http://{{ .IPaddr }}/gnss.html" target="_blank"><button class="btn btn-outline-primary btn-sm add" type="button" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}">GNSS</button></a>
-	</div>
-</div>
     
- <div class="d-flex"> 
     <table class="table table-dark table-sm" style="width: 600px;">
       <tr>
         <td><label for="message-text" class="col-form-label">IP-адрес:</label></td>
@@ -350,8 +352,16 @@
         <td><label id="version{{ .Id }}" for="message-text" class="col-form-label"></label>
       </tr>
   </table>
+ </div>
+ 
+<div class="d-grid col-1">
+  <a class="btn btn-dark btn-sm add" href="http://{{ .IPaddr }}/index.html" target="_blank" role="button">Menu</a>
+  <a class="btn btn-dark btn-sm add" href="http://{{ .IPaddr }}/sync.html" target="_blank" role="button">Sync</a>
+  <a class="btn btn-dark btn-sm add" href="http://{{ .IPaddr }}/ptp{{ .PZG_VZG }}.html" target="_blank" role="button">PTP</a>
+  <a class="btn btn-dark btn-sm add" href="http://{{ .IPaddr }}/gnss.html" target="_blank" role="button">GNSS</a>
+</div>
 
-  </div>
+</div>
   
   <div class="d-flex">
   <table>
@@ -360,15 +370,17 @@
       </tr>
   </table>
   
-  <div>
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getgnss">GNSS</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="stgpsmon">Состояние приемника</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getver">Версия и параметры названия</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getconfig">Настройки сети</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getmac">МАС-адрес и серийный номер</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getsync">Конфигурация синхронизации</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptp">Конфигурация PTP</button></div> 
-	<div><button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptpdata">Данные состояния PTP</button></div> 
+
+  
+  <div class="d-grid col-2">
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getgnss">GNSS</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="stgpsmon">Состояние приемника</button>
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getver">Версия и параметры названия</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getconfig">Настройки сети</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getmac">МАС-адрес и серийный номер</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getsync">Конфигурация синхронизации</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptp">Конфигурация PTP</button> 
+	<button class="btn btn-outline-primary btn-sm add btnCurl" btnId="{{ .Id }}" btnIP="{{ .IPaddr }}" btnCmd="getptpdata">Данные состояния PTP</button> 
     </div>
   
   </div>
@@ -395,20 +407,17 @@
 
 
 
-<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTopTerminal" aria-labelledby="offcanvasTopLabel">
+<div class="offcanvas offcanvas-top bg-black text-white" style="height: 80vh" tabindex="-1" id="offcanvasTopTerminal" aria-labelledby="offcanvasTopLabel">
   <div class="offcanvas-header">
     <h5 id="offcanvasTopLabel">Терминал</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="btn btn-outline-secondary btns btn-sm add text-reset" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
   </div>
   <div class="offcanvas-body d-flex">
   
-  
-<div id="terminal-container"></div>
-<script defer src="/scripts/terminal.js"></script>
-
+  <div id="terminal-container"></div>
+  <script defer src="/scripts/terminal.js"></script>
    
-  </div>
-  
+  </div> 
 </div>
 
 

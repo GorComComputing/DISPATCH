@@ -35,7 +35,7 @@ func events(w http.ResponseWriter, r *http.Request) {
 
 	// Set page fields
 	var bks EventsPage
-	bks.Message = "Message"
+	bks.Message = "⏳ ▁ ▂ ▃ ▄ ▅ ▆"
 	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "events"
 	bks.CurPage = page_int
