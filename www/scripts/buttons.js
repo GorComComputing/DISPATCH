@@ -286,6 +286,9 @@
 				var addId = $(this).attr('btnId');
 				var addIP = $(this).attr('btnIP');
 				
+				console.log(arrID);
+				
+				
 				$.ajax({
 					type: "POST",
 					url: Protocol+"//"+Host+":"+Port+"/api",
@@ -403,9 +406,9 @@
 			var Host = window.location.hostname;
 			var Port = window.location.port;
 			
-			console.log("TEST!");
-			
-  				$.ajax({
+			console.log("Запрос на устройство:");
+// Обновление режима gnss/ptp пока отключу для увеличения скорости			
+/*  				$.ajax({
 					type: "POST",
 					url: Protocol+"//"+Host+":"+Port+"/api",
 					data: "cmd=curls getsync http://"+addIP+"/cgi-bin/configs.cgi?",
@@ -454,7 +457,7 @@
 				        }
 
 				});
-				
+*/				
 				
 				$.ajax({
 					type: "POST",
@@ -463,56 +466,91 @@
 					async: true,
 					success: function(html){
 						if (html == "Request FAIL\n"){
-							$("#gnss_ref"+addId).empty();
-							$("#gnss_ref"+addId).prepend("-=[none]=-");
-							$("#ptp_ref"+addId).empty();
-							$("#ptp_ref"+addId).prepend("-=[none]=-");
+							$("#seven-seg-array-gnss_ref"+addId).sevenSeg({ digits: 8, value: null });
+							$("#seven-seg-array-ptp_ref"+addId).sevenSeg({ digits: 8, value: null });
 							return;
 						}
 						const obj = JSON.parse(html);
-						if (obj.gnssref == ""){
-							gnssref = "NA"
+						
+						var gnssref = "";
+						var ptpref = "";
+						var ptplen = 0;
+						var gnsslen = 0;
+						
+						if (obj.gnssref == "" || obj.gnssref == "-"){
+							gnssref = null
+							gnsslen = 0
 						} else {
 							gnssref = obj.gnssref
+							gnssref.padStart(gnsslen_old , " ");
+							gnsslen_old = gnsslen;
+							if (gnssref.length < 8) gnsslen = 8
+							else 
+							gnsslen = gnssref.length
 						}
-						if (obj.ptpref == ""){
-							ptpref = "NA"
+						if (obj.ptpref == "" || obj.ptpref == "-"){
+							ptpref = null
+							ptplen = 0
 						} else {
 							ptpref = obj.ptpref
+							ptpref.padStart(ptplen_old , " ");
+							ptplen_old = ptplen;
+							if (ptpref.length < 8) ptplen = 8
+							else 
+							ptplen = ptpref.length
 						}
+					
+
+		
+					
+				//$("#seven-seg-array-gnss_ref"+addId).sevenSeg({ digits: gnsslen, value: null });
+				//$("#seven-seg-array-gnss_ref"+addId).html('');	
+				$("#seven-seg-array-gnss_ref"+addId).sevenSeg({
+        				digits: gnsslen,
+        				value: gnssref,
+        				colorOff: "#212529",
+        				colorOn: "#0d6efd",
+        				decimalPlaces: -1,
+        				colorBackground: "#212529",
+        				//slant: 10   // наклон
+    				});
+    				
+    				//$("#seven-seg-array-ptp_ref"+addId).sevenSeg({ digits: ptplen, value: null });
+    				//$("#seven-seg-array-ptp_ref"+addId).html('');
+    				$("#seven-seg-array-ptp_ref"+addId).sevenSeg({
+        				digits: ptplen,
+        				value: ptpref,
+        				colorOff: "#212529",
+        				decimalPlaces: -1,
+        				colorBackground: "#212529",
+        				//colorOn: "#0d6efd",
+    				});
+    				
+    				console.log(ptpref + " : " + ptplen);
+    				console.log(gnssref + " : " + gnsslen);
 						
-						$("#gnss_ref"+addId).empty();
-						$("#gnss_ref"+addId).prepend(gnssref);
-						$("#ptp_ref"+addId).empty();
-						$("#ptp_ref"+addId).prepend(ptpref);
-				
+
 				
 					},
 				   	error: function(xhr, status, error){
-                				$("#gnss_ref"+addId).empty();
-						$("#gnss_ref"+addId).prepend("-=[none]=-");
-						$("#ptp_ref"+addId).empty();
-						$("#ptp_ref"+addId).prepend("-=[none]=-");
+                				$("#seven-seg-array-gnss_ref"+addId).sevenSeg({ digits: 8, value: null });
+						$("#seven-seg-array-ptp_ref"+addId).sevenSeg({ digits: 8, value: null });
 				        }
 				
 				});
 		}
 		
+		
+		var ptplen_old = 0;
+		var gnsslen_old = 0;
+		
 		// Запрос статуса GNSS/PTP каждый 15 сек		
 		setInterval(function() {
-			reqStatusGNSS_PTP("10.1.10.17", "3");
-			reqStatusGNSS_PTP("10.1.10.4", "25");
-			reqStatusGNSS_PTP("10.1.10.6", "47");
-			reqStatusGNSS_PTP("10.1.10.12", "48");
-			reqStatusGNSS_PTP("10.1.10.250", "63");
-			reqStatusGNSS_PTP("10.1.10.251", "64");
+			//Перебор массива
+			arrID.forEach(function(item, i, arr) {
+  				reqStatusGNSS_PTP(item.IPaddr, item.Id);
+			});
 		}, 15000);
 		
 		
-/*		reqStatusGNSS_PTP("10.1.10.17", "3");
-		reqStatusGNSS_PTP("10.1.10.4", "25");
-		reqStatusGNSS_PTP("10.1.10.6", "47");
-		reqStatusGNSS_PTP("10.1.10.12", "48");
-		reqStatusGNSS_PTP("10.1.10.250", "63");
-		reqStatusGNSS_PTP("10.1.10.251", "64");
-*/
+

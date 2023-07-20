@@ -47,6 +47,17 @@
 }
 
 
+.seven-seg {
+    width: 100px;
+    height: 40px;
+    /*padding: 5px;*/
+    /*background: black;*/
+    background-color: var(--bs-table-bg);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 
 
 
