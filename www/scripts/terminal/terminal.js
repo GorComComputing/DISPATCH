@@ -1,4 +1,4 @@
-  var term,
+  		var term,
                     protocol,
                     socketURL,
                     socket,

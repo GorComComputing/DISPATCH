@@ -4,11 +4,16 @@
     	<meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<title>Диспетчер СУ</title>
-	<link rel="stylesheet" href="/css/bootstrap.min.css" />
-    	<link rel="stylesheet" href="/css/styles.css" />
-	
-    	<link rel="stylesheet" href="terminal/xterm.css" />
-    	<link rel="stylesheet" href="terminal/style.css" />    
+    	
+    	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    	
+	<!-- Terminal -->
+    	<link rel="stylesheet" href="/css/terminal/xterm.css" />
+    	<link rel="stylesheet" href="/css/terminal/style.css" />  
+    	
+    	<!-- My styles -->
+    	<link rel="stylesheet" href="/css/styles.css" />  
 </head>
   
 <body>
@@ -284,7 +289,7 @@
   <div class="offcanvas-body d-flex">
   
   <div id="terminal-container"></div>
-  <script defer src="/scripts/terminal.js"></script>
+  <script defer src="/scripts/terminal/terminal.js"></script>
    
   </div> 
 </div>
@@ -292,18 +297,32 @@
 
 
 
-<script src="terminal/xterm.js"></script>
-<script src="terminal/attach.js"></script>
-<script src="terminal/fit.js"></script>
+<!-- React -->
+<script src="scripts/react/unpkg.com_react@18.2.0_umd_react.production.min.js"></script>
+<script src="scripts/react/unpkg.com_react-dom@18.2.0_umd_react-dom.production.min.js"></script>
+<script src="scripts/react/unpkg.com_@babel_standalone@7.22.9_babel.min.js"></script>
 
+<!-- AJAX -->
+<script src="/scripts/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script> 
+
+<!-- sevenSeg -->
+<script src="/scripts/sevenSeg/jquery-ui.min.js"></script>
+<script src="/scripts/sevenSeg/ajax.aspnetcdn.com_ajax_knockout_knockout-2.2.1.js"></script>
+<script src="/scripts/sevenSeg/sevenSeg.js"></script>
+
+<!-- Terminal -->
+<script src="/scripts/terminal/xterm.js"></script>
+<script src="/scripts/terminal/attach.js"></script>
+<script src="/scripts/terminal/fit.js"></script>
+
+<!-- Bootstrap -->
+<script src="/scripts/bootstrap/bootstrap.bundle.min.js"></script>
+ 
+<!-- My scripts --> 
 <script src="/scripts/longpoll.js"></script>
-
-<script src="/scripts/bootstrap.bundle.min.js"></script>
-<script src="/scripts/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script>  
-
 <script src="/scripts/buttons.js"></script>
-	
 <script src="/scripts/messages.js"></script>
+<script type="text/babel" src="/scripts/react.js"></script>
 
 </body>	
 </html>

@@ -4,16 +4,42 @@
     	<meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<title>Диспетчер СУ</title>
-	<link rel="stylesheet" href="/css/bootstrap.min.css" />
-    	<link rel="stylesheet" href="/css/styles.css" />
-	
-    	<link rel="stylesheet" href="terminal/xterm.css" />
-    	<link rel="stylesheet" href="terminal/style.css" />    
     	
-
+    	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    	
+	<!-- Terminal -->
+    	<link rel="stylesheet" href="/css/terminal/xterm.css" />
+    	<link rel="stylesheet" href="/css/terminal/style.css" />  
+    	
+    	<!-- My styles -->
+    	<link rel="stylesheet" href="/css/styles.css" />  
 </head>
   
 <body>
+
+<script>
+	// Сохраняем все параметры полученные от Web-сервера
+	let UserName = "{{ .UserName }}"; 
+	let Message = "{{ .Message }}";
+	
+	let CurPage = "{{ .CurPage }}";
+	let PrevPage = "{{ .PrevPage }}";
+	let NextPage = "{{ .NextPage }}";
+
+	
+	let arrID = [ ]; 	// Массив Id и IP-адресов
+	{{range .Objects}}
+		// Добавление в массив
+		arrID.push({Id: "{{ .Id }}", Name: "{{ .Name }}", IPaddr: "{{ .IPaddr }}", Version: "{{ .Version }}", GNSS: "{{ .GNSS }}", PTP: "{{ .PTP }}", PZG_VZG: "{{ .PZG_VZG }}"});  
+	{{end}}
+	
+	
+	console.log(UserName);
+	console.log(Message);
+	console.log(CurPage + " " + PrevPage + " " + NextPage);
+	console.log(arrID);
+</script>  
   
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -104,16 +130,16 @@
   </div>
 </div>
   
-  
+<div id="btnsMenu">  
 <!-- Кнопка-триггер модального окна -->
-<button type="button" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
+<!--button type="button" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
   Добавить
 </button> 
 
-<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTopTerminal" aria-controls="offcanvasTop">Терминал</button>
+<span id="btnTerminal"></span>
 
-<button id="btnRefresh" class="btn btn-outline-primary btn-sm add" type="button">Обновить</button>
-
+<button id="btnRefresh" class="btn btn-outline-primary btn-sm add" type="button">Обновить</button-->
+</div>
 
 <!-- Модальное окно ДОБАВИТЬ-->
 <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -148,10 +174,8 @@
 
 
 
-  
-{{if .Message }}
-<p id="app" class="bg-warning table-page">{{ .Message }}</p>
-{{end}}
+<div id="message"></div>  
+
 
 
 
@@ -172,9 +196,7 @@
   <!--/thead-->
   
   
-<script>
-	let arrID = [ ]; // Массив Id и IP-адресов
-</script>  
+
   
 
   {{range .Objects}}
@@ -209,9 +231,9 @@
     
     <td class="ipaddr" width="70px">{{ .IPaddr }}</td>
     
-<script>
+<!--script>
 	arrID.push({Id: "{{ .Id }}", IPaddr: "{{ .IPaddr }}"});  // Добавление в массив
-</script> 
+</script--> 
     
     
     <td class="version" width="170px">{{ .Version }}</td>
@@ -298,6 +320,7 @@
   </tr>
   {{end}}
 </table>  
+
 
 
 
@@ -424,18 +447,8 @@
 
 
 
-
-<div class="offcanvas offcanvas-top bg-black text-white" style="height: 80vh" tabindex="-1" id="offcanvasTopTerminal" aria-labelledby="offcanvasTopLabel">
-  <div class="offcanvas-header">
-    <h5 id="offcanvasTopLabel">Терминал</h5>
-    <button type="button" class="btn btn-outline-secondary btns btn-sm add text-reset" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
-  </div>
-  <div class="offcanvas-body d-flex">
-  
-  <div id="terminal-container"></div>
-  <script defer src="/scripts/terminal.js"></script>
-   
-  </div> 
+<div id="termContainer">
+<!--script defer src="/scripts/terminal/terminal.js"></script-->
 </div>
 
 
@@ -444,30 +457,35 @@
 
 
 
+<!-- React -->
+<script src="scripts/react/unpkg.com_react@18.2.0_umd_react.production.min.js"></script>
+<script src="scripts/react/unpkg.com_react-dom@18.2.0_umd_react-dom.production.min.js"></script>
+<script src="scripts/react/unpkg.com_@babel_standalone@7.22.9_babel.min.js"></script>
 
-
-
-
-
-
-
+<!-- AJAX -->
 <script src="/scripts/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script> 
-<script src="/scripts/jquery-ui.min.js"></script>
-<script src="/scripts/ajax.aspnetcdn.com_ajax_knockout_knockout-2.2.1.js"></script>
-<script src="/scripts/sevenSeg.js"></script>
 
-<script src="terminal/xterm.js"></script>
-<script src="terminal/attach.js"></script>
-<script src="terminal/fit.js"></script>
+<!-- sevenSeg -->
+<script src="/scripts/sevenSeg/jquery-ui.min.js"></script>
+<script src="/scripts/sevenSeg/ajax.aspnetcdn.com_ajax_knockout_knockout-2.2.1.js"></script>
+<script src="/scripts/sevenSeg/sevenSeg.js"></script>
 
-<script src="/scripts/longpoll.js"></script>
+<!-- Terminal -->
+<script src="/scripts/terminal/xterm.js"></script>
+<script src="/scripts/terminal/attach.js"></script>
+<script src="/scripts/terminal/fit.js"></script>
 
-<script src="/scripts/bootstrap.bundle.min.js"></script>
+
+
+<!-- Bootstrap -->
+<script src="/scripts/bootstrap/bootstrap.bundle.min.js"></script>
  
-
+<!-- My scripts --> 
+<script src="/scripts/longpoll.js"></script>
 <script src="/scripts/buttons.js"></script>
-	
 <script src="/scripts/messages.js"></script>
+<script type="text/babel" src="/scripts/react.js"></script>
+
 
 </body>	
 </html>

@@ -1,8 +1,23 @@
-		$(document).ready(function(){
-			var Protocol = window.location.protocol;
-			var Host = window.location.hostname;
-			var Port = window.location.port;
+// Обновление статуса
+	var ptplen_old = 0;
+	var gnsslen_old = 0;
+	// Запрос статуса GNSS/PTP каждый 15 сек		
+	setInterval(function() {
+		//Перебор массива
+		arrID.forEach(function(item, i, arr) {
+  			reqStatusGNSS_PTP(item.IPaddr, item.Id);
+		});
+	}, 15000);
+		
+
+// Обработчики нажатия кнопок
+$(document).ready(function(){
+		// Адрес текущего web-сервера
+		var Protocol = window.location.protocol;
+		var Host = window.location.hostname;
+		var Port = window.location.port;
 			
+		// Обработчики нажатия кнопок
 			$('#formDeleteUser1').submit(function(){
 				$.ajax({
 					type: "POST",
@@ -396,12 +411,9 @@
 			$('#btnRefresh').on('click',  function(){location.reload(); /* перезагружаем страницу*/});
 			
 			
-			
-	
-			
-		});
+});
 		
-		function reqStatusGNSS_PTP(addIP, addId) {
+function reqStatusGNSS_PTP(addIP, addId) {
 			var Protocol = window.location.protocol;
 			var Host = window.location.hostname;
 			var Port = window.location.port;
@@ -538,19 +550,10 @@
 				        }
 				
 				});
-		}
+}
 		
 		
-		var ptplen_old = 0;
-		var gnsslen_old = 0;
 		
-		// Запрос статуса GNSS/PTP каждый 15 сек		
-		setInterval(function() {
-			//Перебор массива
-			arrID.forEach(function(item, i, arr) {
-  				reqStatusGNSS_PTP(item.IPaddr, item.Id);
-			});
-		}, 15000);
 		
 		
 

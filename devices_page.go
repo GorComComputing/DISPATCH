@@ -36,7 +36,6 @@ func devices(w http.ResponseWriter, r *http.Request) {
 
 	// Set page fields
 	var bks DevicesPage
-	//bks.Message = "▁ ▂ ▃ ▄ ▅ ▆ ▇ █"//"Message"
 	bks.Message = "⏳ ▁ ▂ ▃ ▄ ▅ ▆"// ⏳ ⌛  ⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖 🕢 🕗 🕣 🕘 🕤 🕙 🕥 🕚 🕦 "
 	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "devices"
