@@ -4,7 +4,7 @@
 	// Запрос статуса GNSS/PTP каждый 15 сек		
 	setInterval(function() {
 		//Перебор массива
-		arrID.forEach(function(item, i, arr) {
+		arrDevice.forEach(function(item, i, arr) {
   			reqStatusGNSS_PTP(item.IPaddr, item.Id);
 		});
 	}, 15000);
@@ -301,7 +301,7 @@ $(document).ready(function(){
 				var addId = $(this).attr('btnId');
 				var addIP = $(this).attr('btnIP');
 				
-				console.log(arrID);
+				//console.log(arrID);
 				
 				
 				$.ajax({
@@ -362,6 +362,10 @@ $(document).ready(function(){
                 				$("#spar"+addId).val("Error: Устройство " + addIP + " не отвечает");
 				        }
 				}).responseText;
+				if (response == "Request FAIL\n"){
+					$("#spar"+addId).val("Error: Устройство " + addIP + " не отвечает");
+					return;
+				}
 				
 				const obj = JSON.parse(response);
 				
