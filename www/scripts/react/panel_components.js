@@ -1,0 +1,253 @@
+'use strict';
+
+
+// Terminal 
+class Terminal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+
+        return (
+		<div id="terminal-container">
+		Terminal disconnect
+		<div className="spinner-border text-primary" role="status">
+    			<span className="visually-hidden">Загрузка...</span>
+  	    	</div>
+		</div>
+		
+		);
+
+  }
+}
+
+
+// Таблица устройств
+class TableDevice extends React.Component {
+  constructor(props) {
+    super(props);
+ 	
+ 	this.state = { message: "No message" };
+  }
+  
+  componentWillMount() {
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_msg")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({message: result.msg});
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          this.setState({message: "Error: No message from server"});
+        }
+      )
+  }
+
+
+  render() {
+  let ListDev = [];
+  
+  arrDevice.forEach(function(item, i, arr) {
+  	let listGNSS;
+  	let listPTP;
+  	console.log(item.GNSS);
+  
+  	if (item.GNSS == "true") listGNSS = [<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>];
+     	else listGNSS = [<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>];
+     	       
+	if (item.PTP == "true") 
+	listPTP = [<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>]; 
+     else listPTP = [<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>]; 
+     
+     	var PZG_VZG_style = {textTransform : "uppercase"};
+
+  	//alert( i + ": " + item + " (массив:" + arr + ")" );
+  	let Id = "mesg_base" + item.Id;
+  	let link_sync = "http://" + item.IPaddr + "/sync.html";
+  	let link_index = "http://" + item.IPaddr + "/index.html";
+  	let link_ptp = "http://" + item.IPaddr + "/ptp" + item.PZG_VZG + ".html";
+  	let link_gnss = "http://" + item.IPaddr + "/gnss.html";
+  	let target_id = "debugpanel" + item.Id;
+  	let target = "#" + target_id;
+  	let gnss_ref = "seven-seg-array-gnss_ref" + item.Id;
+  	let ptp_ref = "seven-seg-array-ptp_ref" + item.Id;
+  	
+  	ListDev.push( <tr> 
+  	<td width="50px"><div id={Id}>{listGNSS} / {listPTP}</div></td> 
+  	<td style={PZG_VZG_style} width="50px">{item.PZG_VZG}</td>
+    	<td className="name">{item.Name }</td>
+    	<td>
+    		{/*<SevenSeg id={gnss_ref} />*/}
+    	</td>
+    	<td>
+    		{/*<SevenSeg id={ptp_ref} />*/}
+    	</td>
+	<td className="ipaddr" width="70px">{item.IPaddr}</td>
+	<td className="version" width="170px">{item.Version}</td>
+	
+	<td class="flex">
+		<ButtonLink caption="Menu" color="btn-warning" href={link_index} />
+		<ButtonLink caption="Sync" color="btn-outline-warning" href={link_sync} />
+		<ButtonLink caption="PTP" color="btn-outline-warning" href={link_ptp} />
+		<ButtonLink caption="GNSS" color="btn-outline-warning" href={link_gnss} />
+
+		{/*<ButtonToggleDebug caption="Debug" color="btn-outline-primary" target={target} Id={item.Id} IP={item.IPaddr} />*/}
+		<ButtonModalDebug caption="Debug" color="btn-outline-primary" target={target} Id={item.Id} IP={item.IPaddr} >
+			<ContainerModal caption={item.Name} id={target_id} max_width="1000px" background_color="#333741">
+				<PanelDebug id={item.Id} ipaddr={item.IPaddr} name={item.Name} PZG_VZG={item.PZG_VZG} />	
+			</ContainerModal>
+		</ButtonModalDebug>
+		
+
+		<ContainerModal caption="Удалить устройство?" id={"deleteModal" + item.Id} max_width="500px">
+ 	 		<FormDelDevice id={item.Id} name={item.Name} /> 
+ 	 	</ContainerModal>
+ 	 	
+		<ModalUpdateDevice id={item.Id} ipaddr={item.IPaddr} />
+		
+		
+	</td>
+  	</tr>);
+  });
+
+var tbody_style = {borderTop: 0};
+
+  
+    return (
+    
+<table className="table table-bordered table-dark table-page">
+<thead>
+  <tr>
+    <th scope="col">gnss/ptp</th>
+    <th scope="col">Режим</th>
+    <th scope="col">Название</th>
+    <th scope="col">gnss ref</th>
+    <th scope="col">ptp ref</th>
+    <th scope="col">IP адрес</th>
+    <th scope="col">Версия прошивки</th>
+    <th scope="col"></th>
+  </tr>
+</thead>
+  
+  <tbody style={tbody_style}>
+  {ListDev}
+  </tbody>
+</table> 
+
+    );
+  }
+}
+
+
+// Панель Отладки
+class PanelDebug extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+
+  render() {
+  let id = "offcanvasTop" + this.props.id;
+  let idLabel = "offcanvasTopLabel" + this.props.id;
+  let idUpdate = "#updateModal" + this.props.id;
+  let idDel = "#deleteModal" + this.props.id;
+  let idSpar = "spar" + this.props.id;
+  let IPaddr = "ipaddr" + this.props.id;
+  let Status = "status" + this.props.id;
+  let Version = "version" + this.props.id;
+  
+  let link_sync = "http://" + this.props.ipaddr + "/sync.html";
+  let link_index = "http://" + this.props.ipaddr + "/index.html";
+  let link_ptp = "http://" + this.props.ipaddr + "/ptp" + this.props.PZG_VZG + ".html";
+  let link_gnss = "http://" + this.props.ipaddr + "/gnss.html";
+  
+
+  let table_style = {width: "600px"};
+  
+    return (
+    
+
+  
+  <div className="offcanvas-body">
+  
+    <ButtonCurlBase caption="Обновить в базе" onClick={this.Click} color="btn-warning" Id={this.props.id} IP={this.props.ipaddr} Cmd="getver" />
+    <button type="button" className="btn btn-primary btn-sm add" data-bs-toggle="modal" data-bs-target={idUpdate}>Изменить IP-адрес</button>
+    <button type="button" className="btn btn-danger btns btn-sm add" data-bs-toggle="modal" data-bs-target={idDel}>Удалить</button>
+  
+  <div className="d-flex">
+  <div>
+{/*  
+  <div id="mesg{{ .Id }}" style="margin-right: 10px; line-height: 2">
+        gnss &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg> &nbsp; 
+    	ptp &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
+  </div>
+    
+  */}  
+    <table className="table table-dark table-sm" style={table_style}>
+    <thead>
+
+      <tr>
+        <td><label for="message-text" className="col-form-label">IP-адрес:</label></td>
+        <td><label id={IPaddr} for="message-text" className="col-form-label"></label></td>
+      </tr>
+      <tr>
+        <td><label for="message-text" className="col-form-label">Режим:</label></td>
+        <td><label id={Status} for="message-text" className="col-form-label"></label></td>
+      </tr>
+      <tr>
+        <td><label for="message-text" className="col-form-label">Версия прошивки:</label></td>
+        <td><label id={Version} for="message-text" className="col-form-label"></label></td>
+      </tr>
+      </thead>
+  
+
+  </table>
+ </div>
+
+<div className="d-grid col-1">
+		<ButtonLink caption="Menu" color="btn-dark" href={link_index} />
+		<ButtonLink caption="Sync" color="btn-dark" href={link_sync} />
+		<ButtonLink caption="PTP" color="btn-dark" href={link_ptp} />
+		<ButtonLink caption="GNSS" color="btn-dark" href={link_gnss} />
+</div>
+
+</div>
+
+  
+  <div className="d-flex">
+  <table>
+      <tr>
+        <td><textarea rows="25" cols="80" className="usage" id={idSpar}></textarea></td>
+      </tr>
+  </table>
+  
+ 
+  
+  <div className="d-grid col-2">
+  	<ButtonCurl caption="GNSS" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getgnss" />
+	<ButtonCurl caption="Состояние приемника" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="stgpsmon" />
+	<ButtonCurl caption="Версия и параметры названия" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getver" />
+	<ButtonCurl caption="Настройки сети" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getconfig" />
+	<ButtonCurl caption="МАС-адрес и серийный номер" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getmac" />
+	<ButtonCurl caption="Конфигурация синхронизации" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getsync" />
+ 	<ButtonCurl caption="Конфигурация PTP" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getptp" />
+ 	<ButtonCurl caption="Данные состояния PTP" onClick={this.Click} color="btn-outline-primary" Id={this.props.id} IP={this.props.ipaddr} Cmd="getptpdata" /> 
+  </div>
+  
+  </div>
+  
+   
+ </div>
+  
+
+ 
+
+
+
+    );
+  }
+}
+

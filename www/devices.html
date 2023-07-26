@@ -10,9 +10,17 @@
 	<script src="scripts/react/unpkg.com_react@18.2.0_umd_react.production.min.js"></script>
 	<script src="scripts/react/unpkg.com_react-dom@18.2.0_umd_react-dom.production.min.js"></script>
 	<script src="scripts/react/unpkg.com_@babel_standalone@7.22.9_babel.min.js"></script>
-
+	<!-- My React components -->
+	<script type="text/babel" src="/scripts/react/button_components.js"></script>
+	<script type="text/babel" src="/scripts/react/container_components.js"></script>
+	<script type="text/babel" src="/scripts/react/line_components.js"></script>
+	<script type="text/babel" src="/scripts/react/navigation_components.js"></script>
+	<script type="text/babel" src="/scripts/react/panel_components.js"></script>
+	<script type="text/babel" src="/scripts/react/panel_components.js"></script>
+	<script type="text/babel" src="/scripts/react/form_components.js"></script>
+	
 	<!-- AJAX -->
-	<script src="/scripts/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script> 
+	<script src="/scripts/ajax/ajax.googleapis.com_ajax_libs_jquery_2.2.0_jquery.min.js"></script> 
 
 	<!-- sevenSeg -->
 	<script src="/scripts/sevenSeg/jquery-ui.min.js"></script>
@@ -61,18 +69,15 @@
 		arrDevice.push({Id: "{{ .Id }}", Name: "{{ .Name }}", IPaddr: "{{ .IPaddr }}", Version: "{{ .Version }}", GNSS: "{{ .GNSS }}", PTP: "{{ .PTP }}", PZG_VZG: "{{ .PZG_VZG }}"});  
 	{{end}}
 	
-	
 	console.log(UserName);
 	console.log(CurPage + " " + PrevPage + " " + NextPage);
 	console.log(arrDevice);
-
 </script> 
 
 <script src="/scripts/longpoll.js"></script>
-<script src="/scripts/buttons.js"></script>
+<script src="/scripts/functions.js"></script>
 <script src="/scripts/messages.js"></script>
 
-<script type="text/babel" src="/scripts/react_components.js"></script>
 <script type="text/babel" src="/scripts/app.js"></script>
 
 </body>	

@@ -1,34 +1,65 @@
-// Адрес текущего web-сервера
+// Адрес текущего web-сервера ------------------------------------------------------------------
 var Protocol = window.location.protocol;
 var Host = window.location.hostname;
 var Port = window.location.port;
 
 
-// Заполнение страницы
-let appArr = []; 	
-
+// Заполнение страницы -------------------------------------------------------------------------
+const application = ReactDOM.createRoot(document.getElementById("application"));
+let appArr = []; 	 
+  
+// Основная страница----------------------------------------------------------------------------
 appArr.push(<NavBar />); 
 
-appArr.push(<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModal"> <ModalAddDevice /> </ButtonModal>);
+appArr.push(<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModal">
+		<ContainerModal caption="Добавить устройство" id="insertModal" max_width="500px">
+ 	 		<FormAddDevice /> 
+ 	 	</ContainerModal> 
+	    </ButtonModal>);
+	    
 if (UserName != "") appArr.push(
-
-<ButtonModal caption="Терминал" color="btn-outline-primary" target="#Terminal">	
-	<ContainerModal caption="Терминал" id="Terminal">
-		<Terminal/>	
-	</ContainerModal>
-</ButtonModal>);
-
+	<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#Terminal">	
+		<ContainerToggle caption="Терминал" id="Terminal">
+			<Terminal/>	
+		</ContainerToggle>
+	</ButtonToggle>);
+	
 appArr.push(<ButtonSimple caption="Обновить" onClick={Refresh} color="btn-outline-primary" />);	
 
-appArr.push(<MsgLine />);	
-appArr.push(<TableDevice />);	
-appArr.push(<Pagination />);	
+appArr.push(<MsgLine />);
+	
+appArr.push(<ContainerSimple id="page"> 
+		<TableDevice />
+		<Pagination />
+	    </ContainerSimple>);
+	    
+	    
+	    
+appArr.push(<ButtonToggle caption="Toggle Test" color="btn-outline-primary" target="#ToggleTest">	
+		<ContainerToggle caption="Toggle Test" id="ToggleTest">
+			<p>Toggle Testing...</p>
+			<TableDevice />
+			<Pagination />	
+		</ContainerToggle>
+	    </ButtonToggle>);	
+	    
+	    
+	    
+appArr.push(<ButtonModal caption="Modal Test" color="btn-outline-primary" target="#ModalTest">	
+		<ContainerModal caption="Modal Test" id="ModalTest">
+			<p>Modal Testing...</p>
+			<TableDevice />
+			<Pagination />	
+		</ContainerModal>
+	   </ButtonModal>);  
+	   
+	   
+	   appArr.push(<SevenSeg  /> );  		
 
-const application = ReactDOM.createRoot(document.getElementById("application"));
-application.render(appArr);
+application.render(appArr);	// Рендер
 
 
-// Обновление статуса
+// Обновление статуса -------------------------------------------------------------------------
 var ptplen_old = 0;
 var gnsslen_old = 0;
 // Запрос статуса GNSS/PTP каждый 15 сек		

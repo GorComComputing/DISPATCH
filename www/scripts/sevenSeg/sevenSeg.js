@@ -15,7 +15,7 @@ var c_sClassSegOn = "sevenSeg-segOn";
 // Default CSS styles. If you don't specify your own CSS or discrete color options, this is what gets used.
 // 
 $("<style type='text/css'>" 
-    + "." + c_sClassSvg + "{fill: #320000; overflow: hidden; stroke-width: 0; height: 100%; width: 100%; background-color: Black}"
+    + "." + c_sClassSvg + "{fill: #320000; overflow: hidden; stroke-width: 0; height: 100%; width: 100%; background-color: #212529}"
     + "." + c_sClassSegOn + "{fill: Red}"
     + "</style>")
     .prependTo("head");
@@ -224,6 +224,7 @@ Widget factory creation handler. This will create N number of sevenSegDigit widg
 */
 _create: function () {
     this.aJqDigits = [];
+    console.log(this.aJqDigits.length);
     var sDigitWidth = this.options.digits && (100 / this.options.digits + "%");
 
     for(var iDigit = 0; iDigit < this.options.digits; ++iDigit) {
