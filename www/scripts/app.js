@@ -1,19 +1,46 @@
+// Адрес текущего web-сервера
+var Protocol = window.location.protocol;
+var Host = window.location.hostname;
+var Port = window.location.port;
+
+
+// Заполнение страницы
 let appArr = []; 	
 
 appArr.push(<NavBar />); 
 
 appArr.push(<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModal"> <ModalAddDevice /> </ButtonModal>);
-if (UserName != "") appArr.push(<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#offcanvasTopTerminal"> <PanelTerminal /> </ButtonToggle>);
-appArr.push(<ButtonSimple caption="Обновить" color="btn-outline-primary" id="btnRefresh" />);	
+if (UserName != "") appArr.push(
 
-appArr.push(<MsgLine caption={Message} />);	
+<ButtonModal caption="Терминал" color="btn-outline-primary" target="#Terminal">	
+	<ContainerModal caption="Терминал" id="Terminal">
+		<Terminal/>	
+	</ContainerModal>
+</ButtonModal>);
+
+appArr.push(<ButtonSimple caption="Обновить" onClick={Refresh} color="btn-outline-primary" />);	
+
+appArr.push(<MsgLine />);	
 appArr.push(<TableDevice />);	
 appArr.push(<Pagination />);	
 
-
-
 const application = ReactDOM.createRoot(document.getElementById("application"));
 application.render(appArr);
+
+
+// Обновление статуса
+var ptplen_old = 0;
+var gnsslen_old = 0;
+// Запрос статуса GNSS/PTP каждый 15 сек		
+setInterval(function() {
+	//Перебор массива
+	arrDevice.forEach(function(item, i, arr) {
+  		reqStatusGNSS_PTP(item.IPaddr, item.Id);
+	});
+}, 15000);
+
+
+
 
 	
 	

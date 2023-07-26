@@ -49,9 +49,7 @@
 <script>
 	// Сохраняем все параметры полученные от Web-сервера
 	let UserName = "{{ .UserName }}"; 
-	let Message = "{{ .Message }}";
 	let BackLink = "{{ .BackLink }}";
-	
 	let CurPage = "{{ .CurPage }}";
 	let PrevPage = "{{ .PrevPage }}";
 	let NextPage = "{{ .NextPage }}";
@@ -65,7 +63,6 @@
 	
 	
 	console.log(UserName);
-	console.log(Message);
 	console.log(CurPage + " " + PrevPage + " " + NextPage);
 	console.log(arrDevice);
 
@@ -76,7 +73,7 @@
 <script src="/scripts/messages.js"></script>
 
 <script type="text/babel" src="/scripts/react_components.js"></script>
-<script type="text/babel" src="/scripts/react_app.js"></script>
+<script type="text/babel" src="/scripts/app.js"></script>
 
 </body>	
 </html>

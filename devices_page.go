@@ -9,7 +9,7 @@ import (
 
 // Page fields
 type DevicesPage struct {
-	Message  string
+	//Message  string
 	UserName string
 	BackLink string
 	CurPage  int
@@ -36,7 +36,7 @@ func devices(w http.ResponseWriter, r *http.Request) {
 
 	// Set page fields
 	var bks DevicesPage
-	bks.Message = "⏳ ▁ ▂ ▃ ▄ ▅ ▆"// ⏳ ⌛  ⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖 🕢 🕗 🕣 🕘 🕤 🕙 🕥 🕚 🕦 "
+	//bks.Message = "⏳ ▁ ▂ ▃ ▄ ▅ ▆"// ⏳ ⌛  ⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖 🕢 🕗 🕣 🕘 🕤 🕙 🕥 🕚 🕦 "
 	bks.UserName = check_cookies(w, r)
 	bks.BackLink = "devices"
 	bks.CurPage = page_int

@@ -20,6 +20,20 @@ func cmd_tst(words []string) string {
 }
 
 
+type Message struct {
+	Msg string `json:"msg"`
+}
+
+func cmd_get_message(words []string) string {
+	data := Message{"⏳ ▁ ▂ ▃ ▄ ▅ ▆"} 
+	MsgBytes, err := json.Marshal(data)
+	if err != nil {
+		// handle err
+	}
+	return string(MsgBytes)
+}
+
+
 func cmd_ls(words []string) string {
 	if len(words) < 2 {
 		fmt.Println("Too little parameters")
@@ -93,6 +107,53 @@ func cmd_curl(words []string) string {
 	output += "\n" + str */
 
 	return output 
+}
+
+
+// команда curl json
+func cmd_curl_json(words []string) string {
+
+
+	var output string
+	var result map[string]any
+	
+	data := Payload{words[1]} //"getconfig"
+	
+	payloadBytes, err := json.Marshal(data)
+	if err != nil {
+		// handle err
+	}
+	
+	body := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", words[2], body) //"http://192.168.1.206/cgi-bin/configs.cgi?"
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+	defer resp.Body.Close()
+
+	body_resp, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+	
+	json.Unmarshal(body_resp, &result)
+	
+
+	
+
+
+	return string(body_resp) 
 }
 
 // команда curls - возвращает набор параметров

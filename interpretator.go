@@ -20,11 +20,15 @@ var cmd =  map[string]Cmd{
 	
 	"curl": Cmd{addr: cmd_curl, descr: "Make JSON request to the device and return struct"},
 	"curls": Cmd{addr: cmd_curls, descr: "Make JSON request to the device and return string"},
+	"curlj": Cmd{addr: cmd_curl_json, descr: "Make JSON request to the device and return JSON"},
+	
 	
 	"updatedev": Cmd{addr: cmd_updatedev, descr: "Update information about device into DB"},
 	
 	".quit": Cmd{addr: cmd_quit, descr: "Exit from this program"},
 	".help": Cmd{addr: cmd_help, descr: "Print this Help"},
+	
+	"get_msg": Cmd{addr: cmd_get_message, descr: "Give Message to client"},
 }
 
 
