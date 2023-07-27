@@ -4,61 +4,22 @@ var Host = window.location.hostname;
 var Port = window.location.port;
 
 
+// React Router --------------------------------------------------------------------------------
+const Router = window.ReactRouterDOM.BrowserRouter;
+const Route =  window.ReactRouterDOM.Route;
+const Routes =  window.ReactRouterDOM.Routes;
+const Link =  window.ReactRouterDOM.Link;
+const NavLink =  window.ReactRouterDOM.NavLink;
+const Prompt =  window.ReactRouterDOM.Prompt;
+const Switch = window.ReactRouterDOM.Switch;
+const Redirect = window.ReactRouterDOM.Redirect;
+
+
 // Заполнение страницы -------------------------------------------------------------------------
-const application = ReactDOM.createRoot(document.getElementById("application"));
-let appArr = []; 	 
-  
-// Основная страница----------------------------------------------------------------------------
-appArr.push(<NavBar />); 
+const application = ReactDOM.createRoot(document.getElementById("application"));		
+application.render(<Main/>);	// Рендер
 
-appArr.push(<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModal">
-		<ContainerModal caption="Добавить устройство" id="insertModal" max_width="500px">
- 	 		<FormAddDevice /> 
- 	 	</ContainerModal> 
-	    </ButtonModal>);
-	    
-if (UserName != "") appArr.push(
-	<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#Terminal">	
-		<ContainerToggle caption="Терминал" id="Terminal">
-			<Terminal/>	
-		</ContainerToggle>
-	</ButtonToggle>);
-	
-appArr.push(<ButtonSimple caption="Обновить" onClick={Refresh} color="btn-outline-primary" />);	
-
-appArr.push(<MsgLine />);
-	
-appArr.push(<ContainerSimple id="page"> 
-		<TableDevice />
-		<Pagination />
-	    </ContainerSimple>);
-	    
-	    
-	    
-appArr.push(<ButtonToggle caption="Toggle Test" color="btn-outline-primary" target="#ToggleTest">	
-		<ContainerToggle caption="Toggle Test" id="ToggleTest">
-			<p>Toggle Testing...</p>
-			<TableDevice />
-			<Pagination />	
-		</ContainerToggle>
-	    </ButtonToggle>);	
-	    
-	    
-	    
-appArr.push(<ButtonModal caption="Modal Test" color="btn-outline-primary" target="#ModalTest">	
-		<ContainerModal caption="Modal Test" id="ModalTest">
-			<p>Modal Testing...</p>
-			<TableDevice />
-			<Pagination />	
-		</ContainerModal>
-	   </ButtonModal>);  
-	   
-	   
-	   appArr.push(<SevenSeg  /> );  		
-
-application.render(appArr);	// Рендер
-
-
+console.log("Test");
 // Обновление статуса -------------------------------------------------------------------------
 var ptplen_old = 0;
 var gnsslen_old = 0;
@@ -71,7 +32,7 @@ setInterval(function() {
 }, 15000);
 
 
-
+console.log("Test2");
 
 	
 	

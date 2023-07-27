@@ -25,7 +25,7 @@ class ContainerToggle extends React.Component {
 
   render() {
   	 let style = {"height": "80vh",
-  	 	      "top": "58px"}
+  	 	      "top": "130px"}
 
          return (
 <div className="offcanvas offcanvas-bottom bg-black text-white" style={style} tabIndex="-1" id={this.props.id} aria-labelledby="offcanvasTopLabel">

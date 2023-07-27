@@ -44,16 +44,19 @@ class NavBar extends React.Component {
       <span className="navbar-toggler-icon"></span>
     </button>
     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-	
+    <ReactRouterDOM.HashRouter>         
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
         <li className="nav-item">
-          <a className="nav-link" href="/events">События</a>
+          <NavLink to="/events" className="nav-link">События</NavLink>
         </li>
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="/devices">Устройства</a>
+          <NavLink to="/devices" className="nav-link" aria-current="page">Устройства</NavLink>
         </li>
 		<li className="nav-item">
-          <a className="nav-link" href="/users">Пользователи</a>
+		  <NavLink to="/users" className="nav-link">Пользователи</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink to="/test" className="nav-link">Тест</NavLink>
         </li>
         {/*<!--li className="nav-item dropdown">
           <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,6 +73,7 @@ class NavBar extends React.Component {
           <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Отключенная</a>
         </li-->*/}
       </ul>
+  </ReactRouterDOM.HashRouter>
       
         {/*<!--input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"-->*/}
 	{isUserNameYes}

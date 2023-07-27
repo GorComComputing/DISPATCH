@@ -9,6 +9,9 @@ class MsgLine extends React.Component {
   }
   
   componentWillMount() {
+  if (this.props.message) {
+  	this.setState({message: this.props.message});
+  } else {
     fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_msg")
       .then(res => res.json())
       .then(
@@ -21,11 +24,14 @@ class MsgLine extends React.Component {
           this.setState({message: "Error: No message from server"});
         }
       )
+   }
   }
 
   render() {
+  	let lineClass = this.props.color + " table-page";
+  	
          return (
-  		<p id="message_line" className="bg-warning table-page">{this.state.message}</p>
+  		<p id="message_line" className={lineClass}>{this.state.message}</p>
 		);
   }
 }
@@ -43,3 +49,28 @@ class SevenSeg extends React.Component {
 		);
   }
 }
+
+
+
+// Спиннер
+class Spinner extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render() {
+  let style = {"height": "100%"};
+  			   
+         return (
+         <div className="d-flex justify-content-center" style={style}>
+        	<div className="spinner-border text-primary" role="status" >
+    				<span className="visually-hidden">Загрузка...</span>
+  	    	</div>
+  	    </div>
+
+		);
+  }
+}
+
+
+

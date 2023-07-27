@@ -10,21 +10,22 @@ class Terminal extends React.Component {
   render() {
 
         return (
-		<div id="terminal-container">
-		Terminal disconnect
-		<div className="spinner-border text-primary" role="status">
-    			<span className="visually-hidden">Загрузка...</span>
-  	    	</div>
-		</div>
-		
+        	<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#Terminal">	
+			<ContainerToggle caption="Терминал" id="Terminal">
+				<div id="terminal-container">
+					Terminal disconnect
+					<Spinner />
+				</div>	
+			</ContainerToggle>
+		</ButtonToggle>
 		);
 
   }
 }
 
 
-// Таблица устройств
-class TableDevice extends React.Component {
+// Таблица устройств (приготовил удалить)
+class TableDevice_OLD extends React.Component {
   constructor(props) {
     super(props);
  	
@@ -136,8 +137,7 @@ var tbody_style = {borderTop: 0};
   {ListDev}
   </tbody>
 </table> 
-
-    );
+);
   }
 }
 
@@ -248,6 +248,294 @@ class PanelDebug extends React.Component {
 
 
     );
+  }
+}
+
+
+
+// Таблица устройств 
+class TableDevices extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoading: false
+    };
+  }
+  
+  
+  componentWillMount() {				
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_dev 0")
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log("Load False");
+        	
+        	this.setState({isLoading: false});
+        
+        	let items = [...this.state.items];
+  			result.forEach(function (item, i) {
+				items.push(result[i]);
+				this.setState({ items: items });
+  			}.bind(this));
+  			
+  			this.setState({isLoading: true});
+  			console.log("Load True");
+ 
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          this.setState({name: "Error: No message from server"});
+        }
+      )
+  }
+
+  render() {
+  	var tbody_style = {borderTop: 0};
+  	var PZG_VZG_style = {textTransform : "uppercase"};
+  	
+  	let listGNSS;
+  	let listPTP;
+  	
+
+         return (   <div>
+         {this.state.isLoading ? [ 
+<table className="table table-bordered table-dark table-page">
+<thead>
+  <tr>
+    <th scope="col">gnss/ptp</th>
+    <th scope="col">Режим</th>
+    <th scope="col">Название</th>
+    <th scope="col">gnss ref</th>
+    <th scope="col">ptp ref</th>
+    <th scope="col">IP адрес</th>
+    <th scope="col">Версия прошивки</th>
+    <th scope="col"></th>
+  </tr>
+</thead>
+  
+  <tbody style={tbody_style}>
+  {this.state.items.map(item => (
+
+            <tr>
+            <td width="50px"><div id={item["Id"]}>{
+            item["GNSS"] ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+     	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+            } / {
+            item["PTP"] ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+     	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+            }</div></td> 
+  			<td style={PZG_VZG_style} width="50px">{item["PZG_VZG"]}</td>
+    		<td className="name">{item["Name"]}</td>
+    		<td>
+    			<SevenSeg id={"seven-seg-array-gnss_ref"+item["Id"]} />
+    		</td>
+    		<td>
+    			<SevenSeg id={"seven-seg-array-ptp_ref"+item["Id"]} />
+    		</td>
+    		<td className="ipaddr" width="70px">{item["IPaddr"]}</td>
+			<td className="version" width="170px">{item["Version"]}</td>
+			
+			<td class="flex">
+				<ButtonLink caption="Menu" color="btn-warning" href={"http://" + item["IPaddr"] + "/index.html"} />
+				<ButtonLink caption="Sync" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/sync.html"} />
+				<ButtonLink caption="PTP" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/ptp" + item["PZG_VZG"] + ".html"} />
+				<ButtonLink caption="GNSS" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/gnss.html"} />
+
+		
+				<ButtonModalDebug caption="Debug" color="btn-outline-primary" target={"#debugpanel" + item["Id"]} Id={item["Id"]} IP={item["IPaddr"]} >
+					<ContainerModal caption={item["Name"]} id={"debugpanel" + item["Id"]} max_width="1000px" background_color="#333741">
+						<PanelDebug id={item["Id"]} ipaddr={item["IPaddr"]} name={item["Name"]} PZG_VZG={item["PZG_VZG"]} />	
+					</ContainerModal>
+				</ButtonModalDebug>
+
+
+				<ContainerModal caption="Удалить устройство?" id={"deleteModal" + item["Id"]} max_width="500px">
+ 	 				<FormDelDevice id={item["Id"]} name={item["Name"]} /> 
+ 	 			</ContainerModal>
+ 	 	
+				<ModalUpdateDevice id={item["Id"]} ipaddr={item["IPaddr"]} />
+			</td>
+		</tr>      
+  ))}
+  </tbody>
+</table>, <Pagination /> ] : <Spinner />}
+</div>
+		);
+  }
+}
+
+
+
+// Таблица пользователей 
+class TableUsers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoading: false
+    };
+  }
+  
+  
+  componentWillMount() {				
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_usr 0")
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	this.setState({isLoading: false});
+        	let items = [...this.state.items];
+  			result.forEach(function (item, i) {
+				items.push(result[i]);
+				this.setState({ items: items });
+  			}.bind(this));
+  			this.setState({isLoading: true});
+ 
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          this.setState({name: "Error: No message from server"});
+        }
+      )
+  }
+
+  render() {
+  	var tbody_style = {borderTop: 0};
+  	
+
+         return (   <div>
+         {this.state.isLoading ? [   
+<table className="table table-bordered table-dark table-page">
+<thead>
+	<tr>
+    	<th scope="col">id</th>
+		<th scope="col">Имя пользователя</th>
+		<th scope="col">Логин</th>
+    	<th scope="col">Пароль</th>
+    	<th scope="col">Роль</th>
+		<th scope="col"></th>
+  	</tr>
+</thead>
+  
+  <tbody style={tbody_style}>
+  {this.state.items.map(item => (
+
+            <tr>
+            <td>{item["Id"]}</td> 
+  			<td>{item["UserName"]}</td>
+    		<td>{item["Login"]}</td>
+    		<td>{item["Pswd"]}</td>
+    		<td>{item["UserRole"]}</td>
+    		
+			
+			<td class="flex">
+				<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
+					Удалить
+				</button>
+
+				<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
+					Изменить
+				</button>
+
+
+
+			</td>
+		</tr>      
+  ))}
+  </tbody>
+</table>, <Pagination /> ] : <Spinner />}
+</div>
+		);
+  }
+}
+
+
+
+// Таблица событий 
+class TableEvents extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoading: false
+    };
+  }
+  
+  
+  componentWillMount() {				
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_evnt 0")
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	this.setState({isLoading: false});
+        	let items = [...this.state.items];
+  			result.forEach(function (item, i) {
+				items.push(result[i]);
+				this.setState({ items: items });
+  			}.bind(this));
+  			this.setState({isLoading: true});
+ 
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          this.setState({name: "Error: No message from server"});
+        }
+      )
+  }
+
+  render() {
+  	var tbody_style = {borderTop: 0};
+ 	
+
+         return (   <div>
+         {this.state.isLoading ? [   
+<table className="table table-bordered table-dark table-page">
+<thead>
+	<tr>
+    	<th scope="col">id</th>
+		<th scope="col">Время события</th>
+		<th scope="col">Объект</th>
+    	<th scope="col">Тип события</th>
+    	<th scope="col">Источник</th>
+		<th scope="col">Идентификатор события</th>
+		<th scope="col">Детали</th>
+		<th scope="col">Просмотрено</th>
+		<th scope="col"></th>
+  	</tr>
+</thead>
+  
+  <tbody style={tbody_style}>
+  {this.state.items.map(item => (
+
+            <tr>
+            <td>{item["Id"]}</td> 
+  			<td>{item["Time"]}</td>
+    		<td>{item["Obj_id"]}</td>
+    		<td>{item["Level"]}</td>
+    		<td>{item["Source"]}</td>
+    		<td>{item["Event"]}</td>
+    		<td>{item["Body"]}</td>
+    		<td>{item["Is_checked"]}</td>
+    		
+			
+			<td class="flex">
+				<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
+					Удалить
+				</button>
+	
+				<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
+					Изменить
+				</button>
+			</td>
+		</tr>      
+  ))}
+  </tbody>
+</table>, <Pagination /> ] : <Spinner />}
+</div>
+		);
   }
 }
 

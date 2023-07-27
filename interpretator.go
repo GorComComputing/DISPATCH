@@ -29,6 +29,10 @@ var cmd =  map[string]Cmd{
 	".help": Cmd{addr: cmd_help, descr: "Print this Help"},
 	
 	"get_msg": Cmd{addr: cmd_get_message, descr: "Give Message to client"},
+	"get_dev": Cmd{addr: cmd_get_devices, descr: "Give devices from data base to client"},
+	"get_usr": Cmd{addr: cmd_get_users, descr: "Give users from data base to client"},
+	"get_evnt": Cmd{addr: cmd_get_events, descr: "Give events from data base to client"},
+	
 }
 
 
