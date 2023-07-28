@@ -95,22 +95,25 @@ class Pagination extends React.Component {
 
 
   render() {
-    let linkPrev = BackLink +"?page=" + PrevPage;
-    let linkCur = BackLink +"?page=" + PrevPage;
-    let linkNext = BackLink +"?page=" + NextPage;
+    //let linkPrev = BackLink +"?page=" + PrevPage;
+    //let linkCur = BackLink +"?page=" + PrevPage;
+    //let linkNext = BackLink +"?page=" + NextPage;
+    
+    //let Disabled = (parseInt(this.props.curPage) < 2) ? "disabled" : "";
+    let classDis = "page-item " + ((parseInt(this.props.curPage) < 2) ? "disabled" : "");
   
     return (
     
 <nav aria-label="Page navigation example">
   <ul className="pagination justify-content-center pagination-sm">
-    <li className="page-item disabled">
-      <a className="page-link" href="#" tabindex="-1">Пред.</a>
+    <li className={classDis}>
+      <span className="page-link" tabindex="-1" onClick={this.props.prev}>Пред.</span>
     </li>
-    <li className="page-item"><a className="page-link" href={linkPrev}>{PrevPage}</a></li>
-    <li className="page-item"><span className="page-link">{CurPage}</span></li>
-    <li className="page-item"><a className="page-link" href={linkNext}>{NextPage}</a></li>
+    {/*(this.props.curPage - 1) < 1 ? "" : <li className="page-item"><a className="page-link" href="#">{this.props.curPage - 1}</a></li>*/}
+    <li className="page-item"><span className="page-link">{this.props.curPage}</span></li>
+    {/*<li className="page-item"><a className="page-link" href={linkNext}>{this.props.curPage + 1}</a></li>*/}
     <li className="page-item">
-      <a className="page-link" href="#">След.</a>
+      <span className="page-link" onClick={this.props.next}>След.</span>
     </li>
   </ul>
 </nav>

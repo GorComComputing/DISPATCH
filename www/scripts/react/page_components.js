@@ -5,6 +5,43 @@
 class Devices_page extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.state = {
+      Refresh: false,
+      
+      curPage: 1,
+      //prevPage: 0,
+      //nextPage: 2,
+      count: 10
+    };
+    
+    
+    this.Click = this.Click.bind(this);
+    this.nextPageClick = this.nextPageClick.bind(this);
+	this.prevPageClick = this.prevPageClick.bind(this);
+  }
+  
+  
+  nextPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage + 1
+	}));
+	this.Click();
+  }
+  
+  prevPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage - 1
+	}));
+	this.Click();
+  }
+  
+  
+  Click() {
+  	this.setState((state) => ({
+  		Refresh: !(state.Refresh)
+	}));
+	console.log(this.state.Refresh);
   }
 
   render() {
@@ -21,9 +58,9 @@ class Devices_page extends React.Component {
  	 		</ContainerModal> 
 		</ButtonModal>
 		<Terminal_field />
-		<ButtonSimple caption="Обновить" onClick={Refresh} color="btn-outline-primary" />
+		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-warning" />
-		<TableDevices /> 
+		<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/> 
 	</ContainerSimple>
 		);
 
@@ -35,7 +72,44 @@ class Devices_page extends React.Component {
 class Events_page extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.state = {
+      Refresh: false,
+      
+      curPage: 1,
+      //prevPage: 0,
+      //nextPage: 2,
+      count: 10
+    };
+    
+    this.Click = this.Click.bind(this);
+    this.nextPageClick = this.nextPageClick.bind(this);
+	this.prevPageClick = this.prevPageClick.bind(this);
   }
+  
+  
+  nextPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage + 1
+	}));
+	this.Click();
+  }
+  
+  prevPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage - 1
+	}));
+	this.Click();
+  }
+  
+  
+  Click() {
+  	this.setState((state) => ({
+  		Refresh: !(state.Refresh)
+	}));
+	console.log(this.state.Refresh);
+  }
+  
 
   render() {
 
@@ -46,8 +120,9 @@ class Events_page extends React.Component {
         return (
         <ContainerSimple id="page"> 
 		<Terminal_field />
+		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-success" />
-		<TableEvents /> 
+		<TableEvents key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/> 
 	</ContainerSimple>
 		);
 
@@ -59,6 +134,42 @@ class Events_page extends React.Component {
 class Users_page extends React.Component {
   constructor(props) {
     super(props);
+    
+    this.state = {
+      Refresh: false,
+      
+      curPage: 1,
+      //prevPage: 0,
+      //nextPage: 2,
+      count: 10
+    };
+    
+    this.Click = this.Click.bind(this);
+    this.nextPageClick = this.nextPageClick.bind(this);
+	this.prevPageClick = this.prevPageClick.bind(this);
+  }
+  
+  
+  nextPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage + 1
+	}));
+	this.Click();
+  }
+  
+  prevPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage - 1
+	}));
+	this.Click();
+  }
+  
+  
+  Click() {
+  	this.setState((state) => ({
+  		Refresh: !(state.Refresh)
+	}));
+	console.log(this.state.Refresh);
   }
 
   render() {
@@ -70,8 +181,9 @@ class Users_page extends React.Component {
         return (
         <ContainerSimple id="page"> 
 		<Terminal_field />
+		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-primary" />
-		<TableUsers />
+		<TableUsers key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
 	</ContainerSimple>
 		);
 
@@ -83,6 +195,42 @@ class Users_page extends React.Component {
 class Test_page extends React.Component {
   constructor(props) {
     super(props);
+    
+  	this.state = {
+      Refresh: false,
+      
+      curPage: 1,
+      //prevPage: 0,
+      //nextPage: 2,
+      count: 10
+    };
+    
+    this.Click = this.Click.bind(this);
+    this.nextPageClick = this.nextPageClick.bind(this);
+	this.prevPageClick = this.prevPageClick.bind(this);
+  }
+  
+  
+  nextPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage + 1
+	}));
+	this.Click();
+  }
+  
+  prevPageClick() {
+  	this.setState((state) => ({
+  		curPage: state.curPage - 1
+	}));
+	this.Click();
+  }
+  
+  
+  Click() {
+  	this.setState((state) => ({
+  		Refresh: !(state.Refresh)
+	}));
+	console.log(this.state.Refresh);
   }
 
   render() {
@@ -93,16 +241,18 @@ class Test_page extends React.Component {
 	<ButtonToggle caption="Toggle Test" color="btn-outline-primary" target="#ToggleTest">	
 		<ContainerToggle caption="Toggle Test" id="ToggleTest">
 			<p>Toggle Testing...</p>
-			<TableDevices />
+			<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
 		</ContainerToggle>
 	</ButtonToggle>
 	
 	<ButtonModal caption="Modal Test" color="btn-outline-primary" target="#ModalTest">	
 		<ContainerModal caption="Modal Test" id="ModalTest">
 			<p>Modal Testing...</p>
-			<TableDevices />
+			<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
 		</ContainerModal>
 	</ButtonModal>
+	
+	<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 
 	<MsgLine message="Тест" color="bg-warning" /> 
 	

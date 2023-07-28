@@ -10,6 +10,7 @@ import (
     
     "bytes"
     "encoding/json"
+    "strconv"
 )
 
 
@@ -50,7 +51,8 @@ func trimRightSpace(s string) string {
 
 func cmd_get_devices(words []string) string {
 	// Pagination
-	var rowPerPage int = 10
+	var rowPerPage int = 10;
+	rowPerPage, _ = strconv.Atoi(words[2]);
 	page := words[1]
 	_, offset := pagination(rowPerPage, page)
 
@@ -125,7 +127,8 @@ type GetUsers struct {
 
 func cmd_get_users(words []string) string {
 	// Pagination
-	var rowPerPage int = 10
+	var rowPerPage int = 10;
+	rowPerPage, _ = strconv.Atoi(words[2]);
 	page := words[1]
 	_, offset := pagination(rowPerPage, page)
 
@@ -175,7 +178,8 @@ type GetEvents struct {
 
 func cmd_get_events(words []string) string {
 	// Pagination
-	var rowPerPage int = 10
+	var rowPerPage int = 10;
+	rowPerPage, _ = strconv.Atoi(words[2]);
 	page := words[1]
 	_, offset := pagination(rowPerPage, page)
 

@@ -259,13 +259,30 @@ class TableDevices extends React.Component {
     super(props);
     this.state = {
       items: [],
-      isLoading: false
+      isLoading: false,      
     };
+    
+  }
+  
+  
+  componentDidMount() {
+    // Запрос статуса GNSS/PTP каждый 15 сек		
+	this.timerID = setInterval(function() {
+		//Перебор массива
+		arrDevice.forEach(function(item, i, arr) {
+  			reqStatusGNSS_PTP(item.IPaddr, item.Id);
+		});
+	}, 15000);
+  }
+  
+  
+  componentWillUnmount() {
+    clearInterval(this.timerID);
   }
   
   
   componentWillMount() {				
-    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_dev 0")
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_dev " + this.props.curPage +  " " + this.props.count)
       .then(res => res.json())
       .then(
         (result) => {
@@ -274,10 +291,12 @@ class TableDevices extends React.Component {
         	this.setState({isLoading: false});
         
         	let items = [...this.state.items];
+        	if(result){
   			result.forEach(function (item, i) {
 				items.push(result[i]);
 				this.setState({ items: items });
   			}.bind(this));
+  			}
   			
   			this.setState({isLoading: true});
   			console.log("Load True");
@@ -299,7 +318,15 @@ class TableDevices extends React.Component {
   	let listPTP;
   	
 
-         return (   <div>
+         return (   <div> 
+         {/*<select className="form-select form-select-sm" aria-label=".form-select-sm пример">
+  			<option selected>5</option>
+  			<option value="5">5</option>
+  			<option value="10">10</option>
+  			<option value="15">15</option>
+  			<option value="20">20</option>
+		</select>*/}
+
          {this.state.isLoading ? [ 
 <table className="table table-bordered table-dark table-page">
 <thead>
@@ -360,7 +387,7 @@ class TableDevices extends React.Component {
 		</tr>      
   ))}
   </tbody>
-</table>, <Pagination /> ] : <Spinner />}
+</table>, <Pagination next={this.props.next} prev={this.props.prev} curPage={this.props.curPage}/> ] : <Spinner />}
 </div>
 		);
   }
@@ -380,16 +407,18 @@ class TableUsers extends React.Component {
   
   
   componentWillMount() {				
-    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_usr 0")
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_usr " + this.props.curPage +  " " + this.props.count)
       .then(res => res.json())
       .then(
         (result) => {
         	this.setState({isLoading: false});
         	let items = [...this.state.items];
+        	if(result){
   			result.forEach(function (item, i) {
 				items.push(result[i]);
 				this.setState({ items: items });
   			}.bind(this));
+  			}
   			this.setState({isLoading: true});
  
         },
@@ -445,7 +474,7 @@ class TableUsers extends React.Component {
 		</tr>      
   ))}
   </tbody>
-</table>, <Pagination /> ] : <Spinner />}
+</table>, <Pagination next={this.props.next} prev={this.props.prev} curPage={this.props.curPage}/> ] : <Spinner />}
 </div>
 		);
   }
@@ -465,16 +494,18 @@ class TableEvents extends React.Component {
   
   
   componentWillMount() {				
-    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_evnt 0")
+    fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=get_evnt " + this.props.curPage +  " " + this.props.count)
       .then(res => res.json())
       .then(
         (result) => {
         	this.setState({isLoading: false});
         	let items = [...this.state.items];
+        	if(result){
   			result.forEach(function (item, i) {
 				items.push(result[i]);
 				this.setState({ items: items });
   			}.bind(this));
+  			}
   			this.setState({isLoading: true});
  
         },
@@ -533,7 +564,7 @@ class TableEvents extends React.Component {
 		</tr>      
   ))}
   </tbody>
-</table>, <Pagination /> ] : <Spinner />}
+</table>, <Pagination next={this.props.next} prev={this.props.prev} curPage={this.props.curPage}/> ] : <Spinner />}
 </div>
 		);
   }

@@ -132,6 +132,9 @@ This is the method to set the digit displayed.
 (does not apply if decimal point display is disabled)
 */
 displayValue: function(value, bDecimalPoint) {
+	//console.log("Bf: " + value);
+	if (value === undefined) value = 'z';
+	//console.log("Af: " + value);
     var self = this;
     if(!c_aNumberSegments.hasOwnProperty(value)) return;
     self.options.value = value;
@@ -224,17 +227,18 @@ Widget factory creation handler. This will create N number of sevenSegDigit widg
 */
 _create: function () {
     this.aJqDigits = [];
-    console.log(this.aJqDigits.length);
+    								//console.log("Len: " + this.aJqDigits.length);
     var sDigitWidth = this.options.digits && (100 / this.options.digits + "%");
-
+								//console.log("Dig: " + this.options.digits);
     for(var iDigit = 0; iDigit < this.options.digits; ++iDigit) {
         this.aJqDigits[iDigit] = $("<div/>", {style: "display: inline-block; height: 100%;"})
             .css("width", sDigitWidth) 
             .sevenSegDigit(this.options)
             .appendTo(this.element);
     }
-
+								//console.log("Val: " + this.options.value);
     this.aJqDigits.reverse();
+    this._displayValue(null);
     this._displayValue(this.options.value);
     this._bindMouseWheel();
 },
@@ -298,7 +302,7 @@ _displayValue: function(value) {
     var sValue = self._createValueString(value);
     var iDecimalIdx = sValue.indexOf('.');
     var iDigitIdx = sValue.length - 1;
-
+									//console.log("sVal: " + sValue);
     $.each(self.aJqDigits, function(index, jqDigit) {
         var bDecimal = iDecimalIdx >= 0 && iDigitIdx === iDecimalIdx;
         if(bDecimal) {
@@ -307,6 +311,9 @@ _displayValue: function(value) {
 
         var sDigitValue = sValue[iDigitIdx];        
         jqDigit.sevenSegDigit("displayValue", sDigitValue, bDecimal);
+        
+        //console.log("sDigitValue: " + sDigitValue);
+        //console.log("bDecimal: " + bDecimal);
         
         --iDigitIdx;
     });

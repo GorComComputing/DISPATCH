@@ -19,20 +19,13 @@ const Redirect = window.ReactRouterDOM.Redirect;
 const application = ReactDOM.createRoot(document.getElementById("application"));		
 application.render(<Main/>);	// Рендер
 
-console.log("Test");
 // Обновление статуса -------------------------------------------------------------------------
 var ptplen_old = 0;
 var gnsslen_old = 0;
-// Запрос статуса GNSS/PTP каждый 15 сек		
-setInterval(function() {
-	//Перебор массива
-	arrDevice.forEach(function(item, i, arr) {
-  		reqStatusGNSS_PTP(item.IPaddr, item.Id);
-	});
-}, 15000);
 
 
-console.log("Test2");
+
+
 
 	
 	
