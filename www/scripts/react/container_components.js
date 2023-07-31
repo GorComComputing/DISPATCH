@@ -17,6 +17,27 @@ class ContainerSimple extends React.Component {
 }
 
 
+// Toast Container
+class ContainerToast extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+         return (		
+<div className="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id={this.props.id} className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="toast-body" className="toast-body">
+	{this.props.children}
+    </div>
+  </div>
+</div>
+		);
+  }
+}
+
+
+
 // Toggle Container
 class ContainerToggle extends React.Component {
   constructor(props) {

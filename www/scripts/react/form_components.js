@@ -68,10 +68,50 @@ class FormAddDevice extends React.Component {
   handleSubmit(event) {
     //event.preventDefault();
   }
+  
+  
+   /* SendJSON(){   
+  
+ 
+  	fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'ins_dev',
+      ipaddr: this.state.ipaddr,
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.setState((state) => ({
+  				Refresh: !(state.Refresh)
+			}));
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )       
+  }*/
 
   render() {
   return (
-<form action="/insert_device" method="POST" onSubmit={this.handleSubmit}>
+<form>   {/*action="/insert_device" method="POST"*/}
       <div className="modal-body">
         <input type="hidden" name="backLink" value={BackLink} />
           <div className="mb-3">
@@ -82,7 +122,7 @@ class FormAddDevice extends React.Component {
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-        <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Добавить</button>
+        <button type="button" onClick={() => this.props.addFunc(this.state.ipaddr)} className="btn btn-primary" data-bs-dismiss="modal">Добавить</button>
       </div>
 </form>
 );
@@ -106,7 +146,7 @@ class FormDelDevice extends React.Component {
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-        <button type="submit" className="btn btn-primary">Удалить</button>
+        <button type="button" onClick={() => this.props.delFunc(this.props.id)} className="btn btn-primary" data-bs-dismiss="modal">Удалить</button>
       </div>
 </form>
 		);
@@ -158,7 +198,7 @@ class ModalUpdateDevice extends React.Component {
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-        <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Изменить</button>
+        <button type="button" onClick={() => this.props.updFunc(this.props.id, this.state.ipaddr)} className="btn btn-primary" data-bs-dismiss="modal">Изменить</button>
       </div>
 	  </form>
     </div>

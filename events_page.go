@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
-	"net/http"
+	//"fmt"
+	//"html/template"
+	//"net/http"
 )
 
 // Page fields
-type EventsPage struct {
+/*type EventsPage struct {
 	Message  string
 	UserName string
 	BackLink string
@@ -52,10 +52,10 @@ func events(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("www/events.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
-}
+}*/
 
 // Insert event handler
-func insert_event(w http.ResponseWriter, r *http.Request) {
+/*func insert_event(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	backLink := r.FormValue("backLink")
 
@@ -78,10 +78,10 @@ func insert_event(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Inserted")
 
 	http.Redirect(w, r, backLink, http.StatusSeeOther)
-}
+}*/
 
 // Delete event handler
-func delete_event(w http.ResponseWriter, r *http.Request) {
+/*func delete_event(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 
@@ -96,10 +96,10 @@ func delete_event(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Deleted")
 
 	http.Redirect(w, r, "/events", http.StatusSeeOther)
-}
+}*/
 
 // Update event handler
-func update_event(w http.ResponseWriter, r *http.Request) {
+/*func update_event(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 	//time := r.FormValue("time")
@@ -121,4 +121,4 @@ func update_event(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Updated")
 
 	http.Redirect(w, r, "/events", http.StatusSeeOther)
-}
+}*/

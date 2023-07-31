@@ -51,7 +51,7 @@ class TableDevice_OLD extends React.Component {
   render() {
   let ListDev = [];
   
-  arrDevice.forEach(function(item, i, arr) {
+  result.forEach(function(item, i, arr) {
   	let listGNSS;
   	let listPTP;
   	console.log(item.GNSS);
@@ -266,13 +266,7 @@ class TableDevices extends React.Component {
   
   
   componentDidMount() {
-    // Запрос статуса GNSS/PTP каждый 15 сек		
-	this.timerID = setInterval(function() {
-		//Перебор массива
-		arrDevice.forEach(function(item, i, arr) {
-  			reqStatusGNSS_PTP(item.IPaddr, item.Id);
-		});
-	}, 15000);
+
   }
   
   
@@ -294,10 +288,18 @@ class TableDevices extends React.Component {
         	if(result){
   			result.forEach(function (item, i) {
 				items.push(result[i]);
-				this.setState({ items: items });
+				this.setState({ items: items });	
   			}.bind(this));
-  			}
   			
+  			// Запрос статуса GNSS/PTP каждый 15 сек		
+			this.timerID = setInterval(function() {
+				//Перебор массива
+				result.forEach(function(item, i, arr) {
+					console.log(item.IPaddr);
+  					reqStatusGNSS_PTP(item.IPaddr, item.Id);
+				});
+			}, 15000);
+  		}
   			this.setState({isLoading: true});
   			console.log("Load True");
  
@@ -307,7 +309,7 @@ class TableDevices extends React.Component {
         (error) => {
           this.setState({name: "Error: No message from server"});
         }
-      )
+      )  
   }
 
   render() {
@@ -379,10 +381,10 @@ class TableDevices extends React.Component {
 
 
 				<ContainerModal caption="Удалить устройство?" id={"deleteModal" + item["Id"]} max_width="500px">
- 	 				<FormDelDevice id={item["Id"]} name={item["Name"]} /> 
+ 	 				<FormDelDevice id={item["Id"]} name={item["Name"]} delFunc={this.props.delFunc}/> 
  	 			</ContainerModal>
  	 	
-				<ModalUpdateDevice id={item["Id"]} ipaddr={item["IPaddr"]} />
+				<ModalUpdateDevice id={item["Id"]} ipaddr={item["IPaddr"]} updFunc={this.props.updFunc}/>
 			</td>
 		</tr>      
   ))}

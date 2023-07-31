@@ -33,6 +33,18 @@ var cmd =  map[string]Cmd{
 	"get_usr": Cmd{addr: cmd_get_users, descr: "Give users from data base to client"},
 	"get_evnt": Cmd{addr: cmd_get_events, descr: "Give events from data base to client"},
 	
+	"ins_dev": Cmd{addr: cmd_insert_device, descr: "Insert device to data base from client"},
+	"del_dev": Cmd{addr: cmd_delete_device, descr: "Delete device from data base from client"},
+	"upd_dev": Cmd{addr: cmd_update_device, descr: "Update device in data base from client"},
+	
+	"ins_usr": Cmd{addr: cmd_insert_user, descr: "Insert user to data base from client"},
+	"del_usr": Cmd{addr: cmd_delete_user, descr: "Delete user from data base from client"},
+	"upd_usr": Cmd{addr: cmd_update_user, descr: "Update user in data base from client"},
+	
+	"ins_evnt": Cmd{addr: cmd_insert_event, descr: "Insert event to data base from client"},
+	"del_evnt": Cmd{addr: cmd_delete_event, descr: "Delete event from data base from client"},
+	"upd_evnt": Cmd{addr: cmd_update_event, descr: "Update event in data base from client"},
+	
 }
 
 

@@ -140,22 +140,26 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	if strings.Trim(r.URL.Path, "/") == "" {
-		//events(w, r)
-		devices(w, r)
+		index_page(w, r)
 		return
 	}
-	
+	// API from HTTP
 	if strings.Trim(r.URL.Path, "/") == "api" {
 		http_pars(w, r)
 		return
 	}
-	
-	if strings.Trim(r.URL.Path, "/") == "events" {
-		events(w, r)
+	// API from JSON 
+	if strings.Trim(r.URL.Path, "/") == "json" {
+		json_pars(w, r)
 		return
 	}
 	
-	if strings.Trim(r.URL.Path, "/") == "insert_event" {
+	/*if strings.Trim(r.URL.Path, "/") == "events" {
+		events(w, r)
+		return
+	}*/
+	
+	/*if strings.Trim(r.URL.Path, "/") == "insert_event" {
 		insert_event(w, r)
 		return
 	}
@@ -168,19 +172,19 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Trim(r.URL.Path, "/") == "update_event" {
 		update_event(w, r)
 		return
-	}
+	}*/
 	
-	if strings.Trim(r.URL.Path, "/") == "devices" {
-		devices(w, r)
+	/*if strings.Trim(r.URL.Path, "/") == "devices" {
+		index_page(w, r)
 		return
-	}
+	}*/
 	
-	if strings.Trim(r.URL.Path, "/") == "insert_device" {
+	/*if strings.Trim(r.URL.Path, "/") == "insert_device" {
 		insert_device(w, r)
 		return
-	}
+	}*/
 	
-	if strings.Trim(r.URL.Path, "/") == "delete_device" {
+	/*if strings.Trim(r.URL.Path, "/") == "delete_device" {
 		delete_device(w, r)
 		return
 	}
@@ -188,14 +192,14 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Trim(r.URL.Path, "/") == "update_device" {
 		update_device(w, r)
 		return
-	}
+	}*/
 	
-	if strings.Trim(r.URL.Path, "/") == "users" {
+	/*if strings.Trim(r.URL.Path, "/") == "users" {
 		users(w, r)
 		return
-	}
+	}*/
 	
-	if strings.Trim(r.URL.Path, "/") == "insert_user" {
+	/*if strings.Trim(r.URL.Path, "/") == "insert_user" {
 		insert_user(w, r)
 		return
 	}
@@ -208,7 +212,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Trim(r.URL.Path, "/") == "update_user" {
 		update_user(w, r)
 		return
-	}
+	}*/
 	
 	if strings.Trim(r.URL.Path, "/") == "login" {
 		login(w, r)

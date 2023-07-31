@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"html/template"
 	"net/http"
-	"strings"
+	//"strings"
 )
 
 // Page fields
@@ -19,30 +19,30 @@ type DevicesPage struct {
 }
 
 // Devices handler
-func devices(w http.ResponseWriter, r *http.Request) {
+func index_page(w http.ResponseWriter, r *http.Request) {
 	// Pagination
-	var rowPerPage int = 10
-	page := r.URL.Query().Get("page")
-	page_int, offset := pagination(rowPerPage, page)
+	//var rowPerPage int = 10
+	//page := r.URL.Query().Get("page")
+	//page_int, offset := pagination(rowPerPage, page)
 
 	// open database
-	db := openDB()
-	defer db.Close() // close database
+	//db := openDB()
+	//defer db.Close() // close database
 
 	// select query
-	rows, err := db.Query(`SELECT * FROM objects  ORDER BY id ASC LIMIT $1 OFFSET $2`, rowPerPage, offset)
-	CheckError(err)
-	defer rows.Close()
+	//rows, err := db.Query(`SELECT * FROM objects  ORDER BY id ASC LIMIT $1 OFFSET $2`, rowPerPage, offset)
+	//CheckError(err)
+	//defer rows.Close()
 
 	// Set page fields
 	var bks DevicesPage
 	//bks.Message = "⏳ ▁ ▂ ▃ ▄ ▅ ▆"// ⏳ ⌛  ⌚ ⏰ ⏱ ⏲ 🕰 🕛 🕧 🕐 🕜 🕑 🕝 🕒 🕞 🕓 🕟 🕔 🕠 🕕 🕡 🕖 🕢 🕗 🕣 🕘 🕤 🕙 🕥 🕚 🕦 "
 	bks.UserName = check_cookies(w, r)
-	bks.BackLink = "devices"
-	bks.CurPage = page_int
-	bks.PrevPage = page_int - 1
-	bks.NextPage = page_int + 1
-	for rows.Next() {
+	bks.BackLink = "/"
+	//bks.CurPage = page_int
+	//bks.PrevPage = page_int - 1
+	//bks.NextPage = page_int + 1
+	/*for rows.Next() {
 		bk := ObjectFromDB{}
 		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version)
 		var words = []string{"curl", "getsync", "http://" + bk.IPaddr + "/cgi-bin/configs.cgi?"}  
@@ -76,16 +76,16 @@ func devices(w http.ResponseWriter, r *http.Request) {
 		
 		bks.Objects = append(bks.Objects, bk)
 	}
-	CheckError(err)
+	CheckError(err)*/
 
 	// Response template
-	tmpl, _ := template.ParseFiles("www/devices.html")
+	tmpl, _ := template.ParseFiles("www/index.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
 }
 
 // Insert device handler
-func insert_device(w http.ResponseWriter, r *http.Request) {
+/*func insert_device(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	backLink := r.FormValue("backLink")
 
@@ -123,10 +123,10 @@ func insert_device(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Inserted")
 	
 	http.Redirect(w, r, backLink, http.StatusSeeOther)
-}
+}*/
 
 // Delete device handler
-func delete_device(w http.ResponseWriter, r *http.Request) {
+/*func delete_device(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 
@@ -141,10 +141,10 @@ func delete_device(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Deleted")
 
 	http.Redirect(w, r, "/devices", http.StatusSeeOther)
-}
+}*/
 
 // Update device handler
-func update_device(w http.ResponseWriter, r *http.Request) {
+/*func update_device(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 	//name := r.FormValue("name")
@@ -171,10 +171,7 @@ func update_device(w http.ResponseWriter, r *http.Request) {
 		_, e := db.Exec(updateStmt, ipaddr, name, version, id)
 		CheckError(e)
 
-		// insert hardcoded
-		/*insertStmt := `insert into "objects" ("objectname", "ipaddress", "version") values($1, $2, $3)`
-		_, e := db.Exec(insertStmt, name, address, version)
-		CheckError(e)*/
+
 	} else {
 		// open database
 		db := openDB()
@@ -184,13 +181,10 @@ func update_device(w http.ResponseWriter, r *http.Request) {
 		_, e := db.Exec(updateStmt, ipaddr, "-=[not_device]=-", "-=[not_version]=-", id)
 		CheckError(e)
 
-		// insert hardcoded
-		/*insertStmt := `insert into "objects" ("objectname", "ipaddress") values($1, $2)`
-		_, e := db.Exec(insertStmt, "-=[not_device]=-", address)
-		CheckError(e)*/
+
 	}
 	
 	fmt.Println("Updated")
 
 	http.Redirect(w, r, "/devices", http.StatusSeeOther)
-}
+}*/

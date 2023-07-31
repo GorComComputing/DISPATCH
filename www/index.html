@@ -56,6 +56,9 @@
 <body>
 <div id="application"></div>
 
+
+
+
 <!--script defer src="/scripts/terminal/terminal.js"></script-->
 
 <!-- My scripts --> 
@@ -63,20 +66,20 @@
 	// Сохраняем все параметры полученные от Web-сервера
 	let UserName = "Test";//"{{ .UserName }}"; 
 	let BackLink = "{{ .BackLink }}";
-	let CurPage = "{{ .CurPage }}";
-	let PrevPage = "{{ .PrevPage }}";
-	let NextPage = "{{ .NextPage }}";
+	//let CurPage = "{{ .CurPage }}";
+	//let PrevPage = "{{ .PrevPage }}";
+	//let NextPage = "{{ .NextPage }}";
 
 	
-	let arrDevice = []; 	// Массив Id и IP-адресов
+	//let arrDevice = []; 	// Массив Id и IP-адресов
 	{{range .Objects}}
 		// Добавление в массив
-		arrDevice.push({Id: "{{ .Id }}", Name: "{{ .Name }}", IPaddr: "{{ .IPaddr }}", Version: "{{ .Version }}", GNSS: "{{ .GNSS }}", PTP: "{{ .PTP }}", PZG_VZG: "{{ .PZG_VZG }}"});  
+		//arrDevice.push({Id: "{{ .Id }}", Name: "{{ .Name }}", IPaddr: "{{ .IPaddr }}", Version: "{{ .Version }}", GNSS: "{{ .GNSS }}", PTP: "{{ .PTP }}", PZG_VZG: "{{ .PZG_VZG }}"});  
 	{{end}}
 	
 	console.log(UserName);
-	console.log(CurPage + " " + PrevPage + " " + NextPage);
-	console.log(arrDevice);
+	//console.log(CurPage + " " + PrevPage + " " + NextPage);
+	//console.log(arrDevice);
 </script> 
 
 <script src="/scripts/longpoll.js"></script>

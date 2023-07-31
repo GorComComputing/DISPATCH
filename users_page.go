@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
-	"net/http"
+	//"fmt"
+	//"html/template"
+	//"net/http"
 )
 
 // Page fields
-type UsersPage struct {
+/*type UsersPage struct {
 	Message  string
 	UserName string
 	BackLink string
@@ -15,10 +15,10 @@ type UsersPage struct {
 	PrevPage int
 	NextPage int
 	Objects  []UserFromDB
-}
+}*/
 
 // Users handler
-func users(w http.ResponseWriter, r *http.Request) {
+/*func users(w http.ResponseWriter, r *http.Request) {
 	// Pagination
 	var rowPerPage int = 5
 	page := r.URL.Query().Get("page")
@@ -52,10 +52,10 @@ func users(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("www/users.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
-}
+}*/
 
 // Insert user handler
-func insert_user(w http.ResponseWriter, r *http.Request) {
+/*func insert_user(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	backLink := r.FormValue("backLink")
 
@@ -75,10 +75,10 @@ func insert_user(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Inserted")
 
 	http.Redirect(w, r, backLink, http.StatusSeeOther)
-}
+}*/
 
 // Delete user handler
-func delete_user(w http.ResponseWriter, r *http.Request) {
+/*func delete_user(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 
@@ -93,10 +93,10 @@ func delete_user(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Deleted")
 
 	http.Redirect(w, r, "/users", http.StatusSeeOther)
-}
+}*/
 
 // Update user handler
-func update_user(w http.ResponseWriter, r *http.Request) {
+/*func update_user(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
 	id := r.FormValue("id")
 	name := r.FormValue("name")
@@ -115,4 +115,4 @@ func update_user(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Updated")
 
 	http.Redirect(w, r, "/users", http.StatusSeeOther)
-}
+}*/

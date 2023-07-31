@@ -50,7 +50,7 @@ class NavBar extends React.Component {
           <NavLink to="/events" className="nav-link">События</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to="/devices" className="nav-link" aria-current="page">Устройства</NavLink>
+          <NavLink to="/" exact className="nav-link" aria-current="page">Устройства</NavLink>
         </li>
 		<li className="nav-item">
 		  <NavLink to="/users" className="nav-link">Пользователи</NavLink>
