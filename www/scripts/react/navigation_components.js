@@ -94,12 +94,7 @@ class Pagination extends React.Component {
   }
 
 
-  render() {
-    //let linkPrev = BackLink +"?page=" + PrevPage;
-    //let linkCur = BackLink +"?page=" + PrevPage;
-    //let linkNext = BackLink +"?page=" + NextPage;
-    
-    //let Disabled = (parseInt(this.props.curPage) < 2) ? "disabled" : "";
+  render() {    
     let classDis = "page-item " + ((parseInt(this.props.curPage) < 2) ? "disabled" : "");
   
     return (

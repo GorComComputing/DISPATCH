@@ -16,7 +16,8 @@ class Main extends React.Component {
           	{/*<Route path="/devices" component={Devices_page} />*/}
           	<Route path="/users" component={Users_page} />
           	<Route path="/test"  component={Test_page} />
-	</ReactRouterDOM.HashRouter>
+	</ReactRouterDOM.HashRouter>,
+	<ContainerToast id="liveToast" />
 	]);
 
   }

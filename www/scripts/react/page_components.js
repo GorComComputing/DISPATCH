@@ -8,10 +8,7 @@ class Devices_page extends React.Component {
     
     this.state = {
       Refresh: false,
-      
       curPage: 1,
-      //prevPage: 0,
-      //nextPage: 2,
       count: 10
     };
     
@@ -168,16 +165,15 @@ class Devices_page extends React.Component {
 
         return (
         <ContainerSimple id="page"> 
-		<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModal">
-			<ContainerModal caption="Добавить устройство" id="insertModal" max_width="500px">
- 	 			<FormAddDevice addFunc={this.SendJSON} /> 
+		<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModalDevice">
+			<ContainerModal caption="Добавить устройство" id="insertModalDevice" max_width="500px">
+ 	 			<FormAddDevice addFunc={this.Insert_Dev_JSON} /> 
  	 		</ContainerModal> 
 		</ButtonModal>
 		<Terminal_field />
 		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-warning" />
 		<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_Dev_JSON} updFunc={this.Update_Dev_JSON}/> 
-		<ContainerToast id="liveToast" />
 	</ContainerSimple>
 		);
 
@@ -192,16 +188,16 @@ class Events_page extends React.Component {
     
     this.state = {
       Refresh: false,
-      
       curPage: 1,
-      //prevPage: 0,
-      //nextPage: 2,
       count: 10
     };
     
     this.Click = this.Click.bind(this);
     this.nextPageClick = this.nextPageClick.bind(this);
 	this.prevPageClick = this.prevPageClick.bind(this);
+	this.Insert_Event_JSON = this.Insert_Event_JSON.bind(this);
+    this.Delete_Event_JSON = this.Delete_Event_JSON.bind(this);
+    this.Update_Event_JSON = this.Update_Event_JSON.bind(this);
   }
   
   
@@ -227,6 +223,129 @@ class Events_page extends React.Component {
 	console.log(this.state.Refresh);
   }
   
+  
+  Insert_Event_JSON(object, level, source, ident, body, is_check){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'ins_evnt',
+      object: object, 
+      level: level,
+      source: source,
+      ident: ident,
+      body: body,
+      is_check: is_check
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )       
+  }
+  
+  
+  Delete_Event_JSON(id){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'del_evnt',
+      id: id.toString(),
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )     
+  }
+  
+  
+  Update_Event_JSON(id, object, level, source, ident, body, is_check){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'upd_evnt',
+      id: id.toString(),
+      object: object.toString(),
+      level: level.toString(),
+      source: source.toString(),
+      ident: ident.toString(),
+      body: body.toString(),
+      is_check: is_check.toString()
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )     
+  }
+  
+  
 
   render() {
 
@@ -236,11 +355,15 @@ class Events_page extends React.Component {
 
         return (
         <ContainerSimple id="page"> 
-		<Terminal_field />
-		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
-		<MsgLine message="" color="bg-success" />
-		<TableEvents key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/> 
-		<ContainerToast id="liveToast" />
+        	<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModalEvent">
+				<ContainerModal caption="Добавить событие" id="insertModalEvent" max_width="500px">
+ 	 				<FormAddEvent addFunc={this.Insert_Event_JSON} /> 
+ 	 			</ContainerModal> 
+			</ButtonModal>
+			<Terminal_field />
+			<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
+			<MsgLine message="" color="bg-success" />
+			<TableEvents key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_Event_JSON} updFunc={this.Update_Event_JSON}/> 
 	</ContainerSimple>
 		);
 
@@ -254,17 +377,17 @@ class Users_page extends React.Component {
     super(props);
     
     this.state = {
-      Refresh: false,
-      
+      Refresh: false, 
       curPage: 1,
-      //prevPage: 0,
-      //nextPage: 2,
       count: 10
     };
     
     this.Click = this.Click.bind(this);
     this.nextPageClick = this.nextPageClick.bind(this);
 	this.prevPageClick = this.prevPageClick.bind(this);
+	this.Insert_User_JSON = this.Insert_User_JSON.bind(this);
+    this.Delete_User_JSON = this.Delete_User_JSON.bind(this);
+    this.Update_User_JSON = this.Update_User_JSON.bind(this);
   }
   
   
@@ -289,6 +412,125 @@ class Users_page extends React.Component {
 	}));
 	console.log(this.state.Refresh);
   }
+  
+  
+  Insert_User_JSON(name, login, password, role){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'ins_usr',
+      name: name, 
+      login: login,
+      password: password,
+      role: role
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )       
+  }
+  
+  
+  Delete_User_JSON(id){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'del_usr',
+      id: id.toString(),
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )     
+  }
+  
+  
+  Update_User_JSON(id, name, login, password, role){   
+
+  fetch(Protocol+"//"+Host+":"+Port+"/json", {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cmd: 'upd_usr',
+      id: id.toString(),
+      name: name.toString(),
+      login: login.toString(),
+      password: password.toString(),
+      role: role.toString(),
+    }),
+  })
+      .then(res => res.json())
+      .then(
+        (result) => {
+        	console.log(result);
+        	if(result){
+  			var box = document.getElementById("toast-body");
+                	console.log(box.innerHTML);
+    			box.innerHTML = result.msg;
+    	
+    			var toastLiveExample = document.getElementById("liveToast");
+    			var toast = new bootstrap.Toast(toastLiveExample);
+    			toast.show();
+  		}
+  			this.Click();
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          console.log("Error");
+        }
+      )     
+  }
+  
 
   render() {
   
@@ -298,12 +540,16 @@ class Users_page extends React.Component {
 
         return (
         <ContainerSimple id="page"> 
-		<Terminal_field />
-		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
-		<MsgLine message="" color="bg-primary" />
-		<TableUsers key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
-		<ContainerToast id="liveToast" />
-	</ContainerSimple>
+        	<ButtonModal caption="Добавить" color="btn-outline-primary" target="#insertModalUser">
+				<ContainerModal caption="Добавить пользователя" id="insertModalUser" max_width="500px">
+ 	 				<FormAddUser addFunc={this.Insert_User_JSON} /> 
+ 	 			</ContainerModal> 
+			</ButtonModal>
+			<Terminal_field />
+			<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
+			<MsgLine message="" color="bg-primary" />
+			<TableUsers key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_User_JSON} updFunc={this.Update_User_JSON}/>
+		</ContainerSimple>
 		);
 
   }
@@ -316,11 +562,8 @@ class Test_page extends React.Component {
     super(props);
     
   	this.state = {
-      Refresh: false,
-      
+      Refresh: false,     
       curPage: 1,
-      //prevPage: 0,
-      //nextPage: 2,
       count: 10
     };
     
@@ -406,7 +649,10 @@ class Test_page extends React.Component {
 	<ButtonModal caption="Modal Test" color="btn-outline-primary" target="#ModalTest">	
 		<ContainerModal caption="Modal Test" id="ModalTest">
 			<p>Modal Testing...</p>
-			<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
+			{/*<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>*/}
+			<frameset>
+				<frame src="https://www.opennet.ru/base/net/snmp_traps.txt.html" scrolling="no" noresize />
+			</frameset>
 		</ContainerModal>
 	</ButtonModal>
 	
@@ -415,11 +661,7 @@ class Test_page extends React.Component {
 	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />
 
 	<MsgLine message="Тест" color="bg-warning" /> 
-	
-	<SevenSeg />
-	
-	<ContainerToast id="liveToast" />
-	
+
 </ContainerSimple>
 		);
 

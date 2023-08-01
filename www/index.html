@@ -16,7 +16,6 @@
 	<script type="text/babel" src="/scripts/react/line_components.js"></script>
 	<script type="text/babel" src="/scripts/react/navigation_components.js"></script>
 	<script type="text/babel" src="/scripts/react/panel_components.js"></script>
-	<script type="text/babel" src="/scripts/react/panel_components.js"></script>
 	<script type="text/babel" src="/scripts/react/form_components.js"></script>
 	<script type="text/babel" src="/scripts/react/page_components.js"></script>
 	<script type="text/babel" src="/scripts/react/main_components.js"></script>
@@ -40,6 +39,7 @@
 	<!-- Bootstrap -->
 	<script src="/scripts/bootstrap/bootstrap.bundle.min.js"></script>
     	
+    	<script src="wasm_exec.js"></script>
     	
 <!-- CSS -->    	
     	<!-- Bootstrap -->
@@ -53,7 +53,7 @@
     	<link rel="stylesheet" href="/css/styles.css" />  
 </head>
   
-<body>
+<body >
 <div id="application"></div>
 
 
@@ -66,20 +66,7 @@
 	// Сохраняем все параметры полученные от Web-сервера
 	let UserName = "Test";//"{{ .UserName }}"; 
 	let BackLink = "{{ .BackLink }}";
-	//let CurPage = "{{ .CurPage }}";
-	//let PrevPage = "{{ .PrevPage }}";
-	//let NextPage = "{{ .NextPage }}";
-
-	
-	//let arrDevice = []; 	// Массив Id и IP-адресов
-	{{range .Objects}}
-		// Добавление в массив
-		//arrDevice.push({Id: "{{ .Id }}", Name: "{{ .Name }}", IPaddr: "{{ .IPaddr }}", Version: "{{ .Version }}", GNSS: "{{ .GNSS }}", PTP: "{{ .PTP }}", PZG_VZG: "{{ .PZG_VZG }}"});  
-	{{end}}
-	
 	console.log(UserName);
-	//console.log(CurPage + " " + PrevPage + " " + NextPage);
-	//console.log(arrDevice);
 </script> 
 
 <script src="/scripts/longpoll.js"></script>
@@ -87,6 +74,44 @@
 <script src="/scripts/messages.js"></script>
 
 <script type="text/babel" src="/scripts/app.js"></script>
+
+
+
+
+
+<script>
+            // This is a polyfill for FireFox and Safari
+            if (!WebAssembly.instantiateStreaming) { 
+                WebAssembly.instantiateStreaming = async (resp, importObject) => {
+                    const source = await (await resp).arrayBuffer()
+                    return await WebAssembly.instantiate(source, importObject)
+                }
+            }
+
+            // Promise to load the wasm file
+           function loadWasm(path) {
+             const go = new Go()
+
+             return new Promise((resolve, reject) => {
+               WebAssembly.instantiateStreaming(fetch(path), go.importObject)
+               .then(result => {
+                 go.run(result.instance)
+                 resolve(result.instance)
+               })
+               .catch(error => {
+                 reject(error)
+               })
+             })
+           }
+
+         // Load the wasm file
+         loadWasm("main.wasm").then(wasm => {
+             console.log("main.wasm is loaded 👋")
+         }).catch(error => {
+             console.log("ouch", error)
+         }) 
+
+</script>
 
 </body>	
 </html>

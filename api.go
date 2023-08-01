@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"io"
 	"net/http"
 	
 	"strings"
@@ -28,11 +29,6 @@ func http_pars(w http.ResponseWriter, r *http.Request) {
 			}
   		}
 	}
-	
-	
-	/*for _, val := range words {
-    			fmt.Println(val)
-		}*/
 	
 	
 		isUnion := false
@@ -70,11 +66,6 @@ func http_pars(w http.ResponseWriter, r *http.Request) {
 		}
 		words = words[:len(words)+x]
 		
-		/*for _, val := range words {
-    			fmt.Println("-"+val)
-		}*/
-	
-	
 	
 	out := interpretator(words)
 	if len(out) > 0 {
@@ -105,20 +96,17 @@ func json_pars(w http.ResponseWriter, r *http.Request) {
 		words = strings.Fields(req["cmd"])
 		for param, value := range req {    // range over []string
      			if param != "cmd" {
-				//fmt.Println("2")
 				words = append(words, string(param) + "=" + string(value))
 			}
   		}
 	} else {
 		fmt.Println("not CMD")
 		for param, value := range req {    // range over []string
-				//fmt.Println("2")
 				words = append(words, string(param) + "=" + string(value))
-
   		}
 	}
 	
-  	fmt.Println(words)
+  	//fmt.Println(words)
   	
   	isUnion := false
     		union := ""
@@ -155,12 +143,6 @@ func json_pars(w http.ResponseWriter, r *http.Request) {
 		}
 		words = words[:len(words)+x]
 		
-		/*for _, val := range words {
-    			fmt.Println("-"+val)
-		}*/
-	
-	
-	
 	out := interpretator(words)
 	if len(out) > 0 {
 		fmt.Fprintf(w, out)
@@ -174,49 +156,12 @@ func enableCors(w *http.ResponseWriter) {
 }
 
 
+// создание каналов для long poll
+var messages chan string = make(chan string, 100)
 
-// Event from JSON
-type EventFromJSON struct {
-	Msg    string // "event"
-	Level  string // "info", "warning", "alarm_on", "alarm_off"
-	Id     string // 1234
-	IP     string // "10.1.10.17"
-	Name   string // "Poveleck"
-	Source string // "system"
-	Event  string // "ref_corr"
-	Body   string // "qqqqqq"
+// получение longpoll и установка канала для ответа
+func PollResponse(w http.ResponseWriter, req *http.Request) {
+    	io.WriteString(w, <-messages)
 }
 
-// Event handler
-func add_event(w http.ResponseWriter, r *http.Request) {
 
-	// Parsing JSON
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(body))
-	var evnt EventFromJSON
-	err = json.Unmarshal(body, &evnt)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(evnt.Msg)
-	fmt.Println(evnt.Level)
-	fmt.Println(evnt.Id)
-	fmt.Println(evnt.IP)
-	fmt.Println(evnt.Name)
-	fmt.Println(evnt.Source)
-	fmt.Println(evnt.Event)
-	fmt.Println(evnt.Body)
-
-	// open database
-	db := openDB()
-	defer db.Close() // close database
-
-	// insert hardcoded
-	insertStmt := `insert into "events"("lvl", "obj_id", "src", "evnt", "body") values($1, $2, $3, $4, $5)`
-	_, e := db.Exec(insertStmt, evnt.Level, evnt.Id, evnt.Source, evnt.Event, evnt.Body)
-	CheckError(e)
-	fmt.Println("Inserted Event")
-}

@@ -28,7 +28,7 @@ class ContainerToast extends React.Component {
 <div className="toast-container position-fixed bottom-0 end-0 p-3">
   <div id={this.props.id} className="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div id="toast-body" className="toast-body">
-	{this.props.children}
+	{this.props.children} Test
     </div>
   </div>
 </div>

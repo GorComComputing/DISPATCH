@@ -23,7 +23,10 @@ application.render(<Main/>);	// Рендер
 var ptplen_old = 0;
 var gnsslen_old = 0;
 
-
+// Установка longpoll
+$(document).ready(function(){
+	set_longpoll();
+});
 
 
 

@@ -456,6 +456,7 @@ func cmd_insert_event(words []string) string {
 	if err != nil {
 		// handle err
 	}
+	messages <- string(MsgBytes) + "\n"
 	return string(MsgBytes) + "\n"
 }
 

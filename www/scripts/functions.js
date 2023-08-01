@@ -1,8 +1,7 @@
 // Обновляет страницу
-function Refresh() {
-	//MsgLine.setState({message: "test"});
-	location.reload(); /* перезагружаем страницу*/
-}
+/*function Refresh() {
+	location.reload();
+}*/
 		
 
 // Обновляет информацию (для запросов каждые 15 секунд)		

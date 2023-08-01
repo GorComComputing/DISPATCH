@@ -103,10 +103,6 @@ func main() {
     			}
     		}
     		
-    		//fmt.Println(union)
-    		//fmt.Println(count)
-    		//fmt.Println(length)
-    		//fmt.Println(Unions)
     		
     		x := 0
     		for i, val := range count {
@@ -115,13 +111,7 @@ func main() {
     			x -= length[i]
 		}
 		words = words[:len(words)+x]
-		
-		//for _, val := range words {
-    		//	fmt.Println(val)
-		//}
-    		
-    		
-
+	   		
 		out := interpretator(words)
 		if len(out) > 0 {
 			fmt.Print(out)
@@ -153,67 +143,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		json_pars(w, r)
 		return
 	}
-	
-	/*if strings.Trim(r.URL.Path, "/") == "events" {
-		events(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "insert_event" {
-		insert_event(w, r)
+	// Long poll
+	if strings.Trim(r.URL.Path, "/") == "poll" {
+		PollResponse(w, r)
 		return
 	}
-	
-	if strings.Trim(r.URL.Path, "/") == "delete_event" {
-		delete_event(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "update_event" {
-		update_event(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "devices" {
-		index_page(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "insert_device" {
-		insert_device(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "delete_device" {
-		delete_device(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "update_device" {
-		update_device(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "users" {
-		users(w, r)
-		return
-	}*/
-	
-	/*if strings.Trim(r.URL.Path, "/") == "insert_user" {
-		insert_user(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "delete_user" {
-		delete_user(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "update_user" {
-		update_user(w, r)
-		return
-	}*/
-	
 	if strings.Trim(r.URL.Path, "/") == "login" {
 		login(w, r)
 		return
@@ -221,11 +155,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	
 	if strings.Trim(r.URL.Path, "/") == "logout" {
 		logout(w, r)
-		return
-	}
-	// API routs
-	if strings.Trim(r.URL.Path, "/") == "event" {
-		add_event(w, r)
 		return
 	}
 	

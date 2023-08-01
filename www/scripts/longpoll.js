@@ -1,7 +1,7 @@
 // установка всех longpoll
 function set_longpoll() {
 	longpoll('/poll', recv);
-	longpoll2('/is_act', recv2);
+	//longpoll2('/is_act', recv2);
 }
 
 
@@ -18,12 +18,13 @@ function longpoll(url, callback) {
                 longpoll(url, callback);
             } else {
                 //alert ("long-poll connection lost");
-                var box = document.getElementById("counter");
+    		var box = document.getElementById("toast-body");
+                //console.log(box.innerHTML);
     		box.innerHTML = "Связь с сервером потеряна";
     	
-    		var toastLiveExample = document.getElementById("liveToast")
-    		var toast = new bootstrap.Toast(toastLiveExample)
-    		toast.show()
+    		var toastLiveExample = document.getElementById("liveToast");
+    		var toast = new bootstrap.Toast(toastLiveExample);
+    		toast.show();
             }
         }
     };
@@ -34,15 +35,19 @@ function longpoll(url, callback) {
 
 // действие на странице при получении сообщения с сервера
 function recv(msg) {
-    	var box = document.getElementById("counter");
-    	box.innerHTML = msg + "\n";
+	//console.log(msg);
+	const obj = JSON.parse(msg);
+	console.log(obj.msg);
+	
+    	var box = document.getElementById("toast-body");
+    	box.innerHTML = obj.msg;
     	
     	var toastLiveExample = document.getElementById("liveToast")
     	var toast = new bootstrap.Toast(toastLiveExample)
     	toast.show()
 }
 
-
+/*
 // установка longpoll
 function longpoll2(url, callback) {
 
@@ -76,4 +81,4 @@ function recv2(msg) {
     	box.innerHTML = msg + "\n";
     	var box2 = document.getElementById("mesg2");
     	box2.innerHTML = msg + "\n";
-}
+}*/
