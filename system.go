@@ -47,14 +47,15 @@ func cmd_insert_device(words []string) string {
 	if result != nil{
 		name := fmt.Sprintf("%v", result["description"])
 		version := fmt.Sprintf("%v", result["softversion"])
+		mode := fmt.Sprintf("%v", result["mode"])
 		
 		// open database
 		db := openDB()
 		defer db.Close() // close database
 
 		// insert hardcoded
-		insertStmt := `insert into "objects" ("objectname", "ipaddress", "version") values($1, $2, $3)`
-		_, e := db.Exec(insertStmt, name, address, version)
+		insertStmt := `insert into "objects" ("objectname", "ipaddress", "version", "mode") values($1, $2, $3, $4)`
+		_, e := db.Exec(insertStmt, name, address, version, mode)
 		CheckError(e)
 	} else {
 		// open database
@@ -62,8 +63,8 @@ func cmd_insert_device(words []string) string {
 		defer db.Close() // close database
 
 		// insert hardcoded
-		insertStmt := `insert into "objects" ("objectname", "ipaddress", "version") values($1, $2, $3)`
-		_, e := db.Exec(insertStmt, "-=[not_device]=-", address, "-=[not_version]=-")
+		insertStmt := `insert into "objects" ("objectname", "ipaddress", "version", "mode") values($1, $2, $3, $4)`
+		_, e := db.Exec(insertStmt, "-=[no_name]=-", address, "-=[no_version]=-", "-no-")
 		CheckError(e)
 	}
 	
@@ -646,8 +647,8 @@ func cmd_get_devices(words []string) string {
 	var bks []ObjectFromDB
 	for rows.Next() {
 		bk := ObjectFromDB{}
-		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version)
-		var words = []string{"curl", "getsync", "http://" + bk.IPaddr + "/cgi-bin/configs.cgi?"}  
+		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version, &bk.PZG_VZG)
+		/*var words = []string{"curl", "getsync", "http://" + bk.IPaddr + "/cgi-bin/configs.cgi?"}  
 		_, result := curl(words)
 	
 		if result != nil{
@@ -673,7 +674,12 @@ func cmd_get_devices(words []string) string {
 		
 		if result != nil{
 			bk.PZG_VZG = strings.ToLower(fmt.Sprintf("%v", result["mode"]))
-		} 
+		} */
+
+		//bk.PZG_VZG = "non"
+		bk.PTP = false
+		bk.GNSS = false
+
 
 		bk.Version = trimRightSpace(bk.Version)
 		bks = append(bks, bk)
@@ -980,6 +986,7 @@ func cmd_updatedev(words []string) string{
 	id := words[1]
 	name := words[2]
 	version := words[3]
+	mode := words[4]
 	//ipaddr := r.FormValue("ipaddr")
 
 	fmt.Println(words)
@@ -991,10 +998,10 @@ func cmd_updatedev(words []string) string{
 	defer db.Close() // close database
 
 	// update
-	updateStmt := `update "objects" set objectname=$1, version=$2 where id=$3`
-	_, e := db.Exec(updateStmt, name, version, id)
+	updateStmt := `update "objects" set objectname=$1, version=$2, mode=$3 where id=$4`
+	_, e := db.Exec(updateStmt, name, version, mode, id)
 	CheckError(e)
-	fmt.Println("Updated")
+	fmt.Println("Updated " + mode)
 
 	output = "Updated"
 	

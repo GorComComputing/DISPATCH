@@ -642,7 +642,8 @@ class Test_page extends React.Component {
 	<ButtonToggle caption="Toggle Test" color="btn-outline-primary" target="#ToggleTest">	
 		<ContainerToggle caption="Toggle Test" id="ToggleTest">
 			<p>Toggle Testing...</p>
-			<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>
+			{/*<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>*/}
+			<Frame src="https://www.opennet.ru/base/net/snmp_traps.txt.html" / >
 		</ContainerToggle>
 	</ButtonToggle>
 	
@@ -650,17 +651,23 @@ class Test_page extends React.Component {
 		<ContainerModal caption="Modal Test" id="ModalTest">
 			<p>Modal Testing...</p>
 			{/*<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick}/>*/}
-			<frameset>
-				<frame src="https://www.opennet.ru/base/net/snmp_traps.txt.html" scrolling="no" noresize />
-			</frameset>
+			<Frame src="https://www.opennet.ru/base/net/snmp_traps.txt.html" / >
 		</ContainerModal>
 	</ButtonModal>
 	
 	<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 	
-	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />
+	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />	
+	
+	<ButtonModal caption="Wasm" color="btn-outline-warning" target="#ModalWasm">	
+		<ContainerModal caption="Wasm" id="ModalWasm" max_width="802px">
+			<Wasm />
+		</ContainerModal>
+	</ButtonModal>
 
 	<MsgLine message="Тест" color="bg-warning" /> 
+	
+	
 
 </ContainerSimple>
 		);

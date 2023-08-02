@@ -73,4 +73,21 @@ class Spinner extends React.Component {
 }
 
 
+// Фрейм
+class Frame extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render() {  			   
+         return (
+  	<frameset>
+		<frame src={this.props.src} scrolling="no" noresize />
+	</frameset>
+
+		);
+  }
+}
+
+
 

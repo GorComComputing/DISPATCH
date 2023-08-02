@@ -108,6 +108,7 @@ class ButtonCurlBase extends React.Component {
   
   		var addName = "";
 		var addVersion = "";
+		var addMode = "";
 		let data_str = "";
    
   fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=curlj "+this.props.Cmd+" http://"+this.props.IP+"/cgi-bin/configs.cgi?")
@@ -129,14 +130,16 @@ class ButtonCurlBase extends React.Component {
 						$("#ptp"+this.props.Id).empty();
 						$("#ptp"+this.props.Id).prepend(result.ptp);
 						
-				
+//BTS-377144 10.1.10.4	2.01.55
     						
     						addVersion = result.softversion;
+    						addMode = result.mode;
+
     						addName = result.description;//.replace(/\s/g,'_');
     					if (addName.includes(' ') ) {
-    							data_str = "cmd=updatedev " + this.props.Id + " '" + addName + "' " + addVersion;
+    							data_str = "cmd=updatedev " + this.props.Id + " '" + addName + "' " + addVersion + "' " + addMode;
 						} else {
-    							data_str = "cmd=updatedev " + this.props.Id + " " + addName + " " + addVersion;
+    							data_str = "cmd=updatedev " + this.props.Id + " " + addName + " " + addVersion + " " + addMode;
 						}
 						
 						console.log(data_str);

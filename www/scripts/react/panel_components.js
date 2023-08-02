@@ -171,6 +171,12 @@ class TableDevices extends React.Component {
 				this.setState({ items: items });	
   			}.bind(this));
   			
+  			//Перебор массива
+				result.forEach(function(item, i, arr) {
+					console.log(item.IPaddr);
+  					reqStatusGNSS_PTP(item.IPaddr, item.Id);
+				});
+  			
   			// Запрос статуса GNSS/PTP каждый 15 сек		
 			this.timerID = setInterval(function() {
 				//Перебор массива
@@ -213,13 +219,13 @@ class TableDevices extends React.Component {
 <table className="table table-bordered table-dark table-page">
 <thead>
   <tr>
-    <th scope="col">gnss/ptp</th>
+    {/*<th scope="col">gnss/ptp</th>*/}
     <th scope="col">Режим</th>
     <th scope="col">Название</th>
     <th scope="col">gnss ref</th>
     <th scope="col">ptp ref</th>
     <th scope="col">IP адрес</th>
-    <th scope="col">Версия прошивки</th>
+    <th scope="col">Версия</th>
     <th scope="col"></th>
   </tr>
 </thead>
@@ -228,13 +234,13 @@ class TableDevices extends React.Component {
   {this.state.items.map(item => (
 
             <tr>
-            <td width="50px"><div id={item["Id"]}>{
+            {/*<td width="50px"><div id={item["Id"]}>{
             item["GNSS"] ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
      	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
             } / {
             item["PTP"] ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
      	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
-            }</div></td> 
+            }</div></td>*/} 
   			<td style={PZG_VZG_style} width="50px">{item["PZG_VZG"]}</td>
     		<td className="name">{item["Name"]}</td>
     		<td>
@@ -247,10 +253,31 @@ class TableDevices extends React.Component {
 			<td className="version" width="170px">{item["Version"]}</td>
 			
 			<td class="flex">
-				<ButtonLink caption="Menu" color="btn-warning" href={"http://" + item["IPaddr"] + "/index.html"} />
+				<ButtonModal caption="Menu" color="btn-warning" target={"#ToggleMenu"+ item["Id"]}>	
+					<ContainerModal caption={"Menu IP: " + item["IPaddr"]} id={"ToggleMenu"+ item["Id"]}>
+						<Frame src={"http://" + item["IPaddr"] + "/index.html"} / >
+					</ContainerModal>
+				</ButtonModal>
+				<ButtonModal caption="Sync" color="btn-outline-warning" target={"#ToggleSync"+ item["Id"]}>	
+					<ContainerModal caption={"Sync IP: " + item["IPaddr"]} id={"ToggleSync"+ item["Id"]}>
+						<Frame src={"http://" + item["IPaddr"] + "/sync.html"} / >
+					</ContainerModal>
+				</ButtonModal>
+				<ButtonModal caption="PTP" color="btn-outline-warning" target={"#TogglePTP"+ item["Id"]}>	
+					<ContainerModal caption={"PTP IP: " + item["IPaddr"]} id={"TogglePTP"+ item["Id"]}>
+						<Frame src={"http://" + item["IPaddr"] + "/ptp" + item["PZG_VZG"] + ".html"} / >
+					</ContainerModal>
+				</ButtonModal>
+				<ButtonModal caption="GNSS" color="btn-outline-warning" target={"#ToggleGNSS"+ item["Id"]}>	
+					<ContainerModal caption={"GNSS IP: " + item["IPaddr"]} id={"ToggleGNSS"+ item["Id"]}>
+						<Frame src={"http://" + item["IPaddr"] + "/gnss.html"} / >
+					</ContainerModal>
+				</ButtonModal>
+				
+				{/*<ButtonLink caption="Menu" color="btn-warning" href={"http://" + item["IPaddr"] + "/index.html"} />
 				<ButtonLink caption="Sync" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/sync.html"} />
 				<ButtonLink caption="PTP" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/ptp" + item["PZG_VZG"] + ".html"} />
-				<ButtonLink caption="GNSS" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/gnss.html"} />
+				<ButtonLink caption="GNSS" color="btn-outline-warning" href={"http://" + item["IPaddr"] + "/gnss.html"} />*/}
 
 		
 				<ButtonModalDebug caption="Debug" color="btn-outline-primary" target={"#debugpanel" + item["Id"]} Id={item["Id"]} IP={item["IPaddr"]} >

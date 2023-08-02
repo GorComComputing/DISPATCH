@@ -75,6 +75,7 @@ function reqStatusGNSS_PTP(addIP, addId) {
 							return;
 						}
 						const obj = JSON.parse(html);
+						console.log(obj.gnssref + " " + obj.ptpref);
 						
 						var gnssref = "";
 						var ptpref = "";
@@ -82,8 +83,8 @@ function reqStatusGNSS_PTP(addIP, addId) {
 						var gnsslen = 0;
 						
 						if (obj.gnssref == "" || obj.gnssref == "-"){
-							gnssref = null
-							gnsslen = 0
+							gnssref = "-"
+							gnsslen = 8
 						} else {
 							gnssref = obj.gnssref
 							gnssref.padStart(gnsslen_old , " ");
@@ -93,8 +94,8 @@ function reqStatusGNSS_PTP(addIP, addId) {
 							gnsslen = gnssref.length
 						}
 						if (obj.ptpref == "" || obj.ptpref == "-"){
-							ptpref = null
-							ptplen = 0
+							ptpref = "-"
+							ptplen = 8
 						} else {
 							ptpref = obj.ptpref
 							ptpref.padStart(ptplen_old , " ");
