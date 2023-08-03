@@ -6,6 +6,15 @@ class Terminal extends React.Component {
   constructor(props) {
     super(props);
   }
+  
+  
+  componentDidMount() {
+		console.log("Com Did");
+		terminalContainer = document.getElementById('terminal-container');
+        createTerminal();     
+        console.log('Test3.js');
+  }
+  
 
   render() {
 
@@ -13,8 +22,8 @@ class Terminal extends React.Component {
         	<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#Terminal">	
 			<ContainerToggle caption="Терминал" id="Terminal">
 				<div id="terminal-container">
-					Terminal disconnect
-					<Spinner />
+					{/*Terminal disconnect
+					<Spinner />*/}
 				</div>	
 			</ContainerToggle>
 		</ButtonToggle>
@@ -46,6 +55,11 @@ class PanelDebug extends React.Component {
   
 
   let table_style = {width: "600px"};
+  let gnss_ptp_style = {
+  		marginRight: "10px",
+  		lineHeight: "2"};
+  		
+  		console.log(this.props.GNSS);
   
     return (
     
@@ -59,13 +73,20 @@ class PanelDebug extends React.Component {
   
   <div className="d-flex">
   <div>
-{/*  
-  <div id="mesg{{ .Id }}" style="margin-right: 10px; line-height: 2">
-        gnss &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg> &nbsp; 
-    	ptp &nbsp; <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
-  </div>
+ 
+
+  
+  <div id={"mesg" + this.props.id} style={gnss_ptp_style}>gnss &nbsp; {
+            this.props.GNSS ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+     	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+            } &nbsp; ptp &nbsp; {
+            this.props.PTP ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+     	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+            }</div>
+            
+            
     
-  */}  
+    
     <table className="table table-dark table-sm" style={table_style}>
     <thead>
 
@@ -282,7 +303,7 @@ class TableDevices extends React.Component {
 		
 				<ButtonModalDebug caption="Debug" color="btn-outline-primary" target={"#debugpanel" + item["Id"]} Id={item["Id"]} IP={item["IPaddr"]} >
 					<ContainerModal caption={item["Name"]} id={"debugpanel" + item["Id"]} max_width="1000px" background_color="#333741">
-						<PanelDebug id={item["Id"]} ipaddr={item["IPaddr"]} name={item["Name"]} PZG_VZG={item["PZG_VZG"]} />	
+						<PanelDebug id={item["Id"]} ipaddr={item["IPaddr"]} name={item["Name"]} PZG_VZG={item["PZG_VZG"]} GNSS={item["GNSS"]} PTP={item["PTP"]} />	
 					</ContainerModal>
 				</ButtonModalDebug>
 

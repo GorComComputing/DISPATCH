@@ -31,8 +31,8 @@ type ObjectFromDB struct {
 	Name   	string
 	IPaddr 	string
 	Id     	int
-	GNSS	 bool
-	PTP	 bool
+	GNSS	 string
+	PTP	 string
 	PZG_VZG string
 }
 

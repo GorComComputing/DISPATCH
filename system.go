@@ -647,7 +647,7 @@ func cmd_get_devices(words []string) string {
 	var bks []ObjectFromDB
 	for rows.Next() {
 		bk := ObjectFromDB{}
-		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version, &bk.PZG_VZG)
+		rows.Scan(&bk.Id, &bk.Name, &bk.IPaddr, &bk.Version, &bk.PZG_VZG, &bk.GNSS, &bk.PTP)
 		/*var words = []string{"curl", "getsync", "http://" + bk.IPaddr + "/cgi-bin/configs.cgi?"}  
 		_, result := curl(words)
 	
@@ -677,8 +677,9 @@ func cmd_get_devices(words []string) string {
 		} */
 
 		//bk.PZG_VZG = "non"
-		bk.PTP = false
-		bk.GNSS = false
+		//bk.PTP = false
+		//bk.GNSS = false
+		fmt.Println(bk.GNSS)
 
 
 		bk.Version = trimRightSpace(bk.Version)

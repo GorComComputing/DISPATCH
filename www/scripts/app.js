@@ -19,6 +19,7 @@ const Redirect = window.ReactRouterDOM.Redirect;
 const application = ReactDOM.createRoot(document.getElementById("application"));		
 application.render(<Main/>);	// Рендер
 
+
 // Обновление статуса -------------------------------------------------------------------------
 var ptplen_old = 0;
 var gnsslen_old = 0;
@@ -27,8 +28,6 @@ var gnsslen_old = 0;
 $(document).ready(function(){
 	set_longpoll();
 });
-
-
 
 	
 	

@@ -1,4 +1,4 @@
-  		var term,
+ 		var term,
                     protocol,
                     socketURL,
                     socket,
@@ -8,25 +8,34 @@
                     rows,
                     szTimer,
                     sessionStats;
-
-                var terminalContainer = document.getElementById('terminal-container');
-                createTerminal();
-                
-                                console.log('Test3');
-
-                function createTerminal() {
-                  //while (terminalContainer.children.length) {
-                  //  terminalContainer.removeChild(terminalContainer.children[0]);
-                  //}
-                  console.log('Test4');
-                  
-                  term = new Terminal({
+                    
+		var terminalContainer = document.getElementById('terminal-container');
+		
+		
+		term = new Terminal({
                     cursorBlink: true,
                     screenKeys: true,
                     /* Initial terminal size to match the session originator's terminal */
                     cols: 100,
                     rows: 30,
                   });
+                
+                
+                /*setTimeout(function(){
+                	terminalContainer = document.getElementById('terminal-container');
+                	createTerminal(); 
+                }, 5000);*/
+                
+                
+                                console.log('Test3.js');
+
+                function createTerminal() {
+                  while (terminalContainer.children.length) {
+                    terminalContainer.removeChild(terminalContainer.children[0]);
+                  }
+                  console.log('Test4');
+                  
+                  
                   protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
                   sessionId = location.pathname.split("/").pop()
                   socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + 
@@ -75,3 +84,5 @@
                 // the session originator's
                 
                 
+                
+               

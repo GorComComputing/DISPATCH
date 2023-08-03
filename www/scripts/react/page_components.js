@@ -170,7 +170,7 @@ class Devices_page extends React.Component {
  	 			<FormAddDevice addFunc={this.Insert_Dev_JSON} /> 
  	 		</ContainerModal> 
 		</ButtonModal>
-		<Terminal_field />
+		<Terminal_field/>
 		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-warning" />
 		<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_Dev_JSON} updFunc={this.Update_Dev_JSON}/> 
@@ -660,7 +660,7 @@ class Test_page extends React.Component {
 	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />	
 	
 	<ButtonModal caption="Wasm" color="btn-outline-warning" target="#ModalWasm">	
-		<ContainerModal caption="Wasm" id="ModalWasm" max_width="802px">
+		<ContainerModal caption="Wasm" id="ModalWasm" max_width="642px">
 			<Wasm />
 		</ContainerModal>
 	</ButtonModal>

@@ -32,6 +32,9 @@ class NavBar extends React.Component {
  	 		</ButtonModal>
 		</form>;
  	 }
+ 	 
+ 
+		
   
          return (
 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -75,12 +78,15 @@ class NavBar extends React.Component {
       </ul>
   </ReactRouterDOM.HashRouter>
       
+  
+      
         {/*<!--input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"-->*/}
 	{isUserNameYes}
     </div>
 	
   </div>
 </nav>
+
 		);
 
   }
