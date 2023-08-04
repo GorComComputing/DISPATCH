@@ -170,7 +170,7 @@ class Devices_page extends React.Component {
  	 			<FormAddDevice addFunc={this.Insert_Dev_JSON} /> 
  	 		</ContainerModal> 
 		</ButtonModal>
-		<Terminal_field/>
+		{/*<Terminal_field/>*/}
 		<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 		<MsgLine message="" color="bg-warning" />
 		<TableDevices key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_Dev_JSON} updFunc={this.Update_Dev_JSON}/> 
@@ -360,7 +360,7 @@ class Events_page extends React.Component {
  	 				<FormAddEvent addFunc={this.Insert_Event_JSON} /> 
  	 			</ContainerModal> 
 			</ButtonModal>
-			<Terminal_field />
+			{/*<Terminal_field/>*/}
 			<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 			<MsgLine message="" color="bg-success" />
 			<TableEvents key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_Event_JSON} updFunc={this.Update_Event_JSON}/> 
@@ -545,7 +545,7 @@ class Users_page extends React.Component {
  	 				<FormAddUser addFunc={this.Insert_User_JSON} /> 
  	 			</ContainerModal> 
 			</ButtonModal>
-			<Terminal_field />
+			{/*<Terminal_field/>*/}
 			<ButtonSimple caption="Обновить" onClick={this.Click} color="btn-outline-primary" />
 			<MsgLine message="" color="bg-primary" />
 			<TableUsers key={this.state.Refresh} curPage={this.state.curPage} count={this.state.count} next={this.nextPageClick} prev={this.prevPageClick} delFunc={this.Delete_User_JSON} updFunc={this.Update_User_JSON}/>

@@ -10,6 +10,7 @@
                     sessionStats;
                     
 		var terminalContainer = document.getElementById('terminal-container');
+		var isTerminalCreated = false;
 		
 		
 		term = new Terminal({
@@ -82,7 +83,7 @@
 
                 // gets called once a second to re-size the terminal to match it to
                 // the session originator's
-                
+
                 
                 
                

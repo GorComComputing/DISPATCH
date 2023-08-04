@@ -109,7 +109,23 @@ class ButtonCurlBase extends React.Component {
   		var addName = "";
 		var addVersion = "";
 		var addMode = "";
+		var addGNSS = "";
+		var addPTP = "";
 		let data_str = "";
+		
+		
+		fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=curlj getsync http://"+this.props.IP+"/cgi-bin/configs.cgi?")
+      			.then((response) => response.json())
+      			.then(
+        			(result) => {
+					addGNSS = result.gnss;
+					addPTP = result.ptp;
+				},
+        			(error) => {
+        				$("#spar"+this.props.Id).val("Error: Устройство " + this.props.IP + " не отвечает");
+        				console.log("Error: Устройство " + this.props.IP + " не отвечает");
+        			}
+      			)
    
   fetch(Protocol+"//"+Host+":"+Port+"/api?cmd=curlj "+this.props.Cmd+" http://"+this.props.IP+"/cgi-bin/configs.cgi?")
       .then((response) => response.json())
@@ -125,7 +141,7 @@ class ButtonCurlBase extends React.Component {
 						$("#status"+this.props.Id).prepend(result.mode);
 						
 						$("#version"+this.props.Id).empty();
-    					$("#version"+this.props.Id).prepend(result.softversion);
+    						$("#version"+this.props.Id).prepend(result.softversion);
           	
 						$("#ptp"+this.props.Id).empty();
 						$("#ptp"+this.props.Id).prepend(result.ptp);
@@ -134,12 +150,14 @@ class ButtonCurlBase extends React.Component {
     						
     						addVersion = result.softversion;
     						addMode = result.mode;
+    						
+    						
 
     						addName = result.description;//.replace(/\s/g,'_');
     					if (addName.includes(' ') ) {
-    							data_str = "cmd=updatedev " + this.props.Id + " '" + addName + "' " + addVersion + "' " + addMode;
+    							data_str = "cmd=updatedev " + this.props.Id + " '" + addName + "' " + addVersion + "' " + addMode + "' " + addGNSS + "' " + addPTP;
 						} else {
-    							data_str = "cmd=updatedev " + this.props.Id + " " + addName + " " + addVersion + " " + addMode;
+    							data_str = "cmd=updatedev " + this.props.Id + " " + addName + " " + addVersion + " " + addMode + " " + addGNSS  + " " + addPTP;
 						}
 						
 						console.log(data_str);

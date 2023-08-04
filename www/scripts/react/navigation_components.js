@@ -61,6 +61,9 @@ class NavBar extends React.Component {
         <li className="nav-item">
           <NavLink to="/test" className="nav-link">Тест</NavLink>
         </li>
+        <li className="nav-item">
+          <ButtonToggle caption="Терминал" color="btn-outline-secondary" target="#Terminal"/>
+        </li>
         {/*<!--li className="nav-item dropdown">
           <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Выпадающий список
@@ -78,7 +81,8 @@ class NavBar extends React.Component {
       </ul>
   </ReactRouterDOM.HashRouter>
       
-  
+  	
+
       
         {/*<!--input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"-->*/}
 	{isUserNameYes}

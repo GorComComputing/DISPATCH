@@ -9,26 +9,25 @@ class Terminal extends React.Component {
   
   
   componentDidMount() {
-		console.log("Com Did");
-		terminalContainer = document.getElementById('terminal-container');
-        createTerminal();     
-        console.log('Test3.js');
+	//console.log("Com Did");
+        if (!isTerminalCreated) {
+        	terminalContainer = document.getElementById('terminal-container');
+        	createTerminal();     
+        	console.log('Create Terminal');
+        	isTerminalCreated = true;
+        }
   }
   
 
   render() {
-
         return (
-        	<ButtonToggle caption="Терминал" color="btn-outline-primary" target="#Terminal">	
-			<ContainerToggle caption="Терминал" id="Terminal">
-				<div id="terminal-container">
-					{/*Terminal disconnect
-					<Spinner />*/}
-				</div>	
-			</ContainerToggle>
-		</ButtonToggle>
+		<ContainerToggle caption="Терминал" id="Terminal">
+			<div id="terminal-container">
+				{/*Terminal disconnect
+				<Spinner />*/}
+			</div>	
+		</ContainerToggle>
 		);
-
   }
 }
 
@@ -77,10 +76,10 @@ class PanelDebug extends React.Component {
 
   
   <div id={"mesg" + this.props.id} style={gnss_ptp_style}>gnss &nbsp; {
-            this.props.GNSS ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+            this.props.GNSS == "ON" ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
      	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
             } &nbsp; ptp &nbsp; {
-            this.props.PTP ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
+            this.props.PTP == "ON" ?  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#198754" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg> :
      	 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" className="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
             }</div>
             
@@ -265,10 +264,10 @@ class TableDevices extends React.Component {
   			<td style={PZG_VZG_style} width="50px">{item["PZG_VZG"]}</td>
     		<td className="name">{item["Name"]}</td>
     		<td>
-    			<SevenSeg id={"seven-seg-array-gnss_ref"+item["Id"]} />
+    			{item["GNSS"] == "ON" ? <SevenSeg id={"seven-seg-array-gnss_ref"+item["Id"]} /> : ""}
     		</td>
     		<td>
-    			<SevenSeg id={"seven-seg-array-ptp_ref"+item["Id"]} />
+    			{item["PTP"] == "ON" ? <SevenSeg id={"seven-seg-array-ptp_ref"+item["Id"]} /> : ""}
     		</td>
     		<td className="ipaddr" width="70px">{item["IPaddr"]}</td>
 			<td className="version" width="170px">{item["Version"]}</td>

@@ -676,13 +676,14 @@ func cmd_get_devices(words []string) string {
 			bk.PZG_VZG = strings.ToLower(fmt.Sprintf("%v", result["mode"]))
 		} */
 
-		//bk.PZG_VZG = "non"
-		//bk.PTP = false
-		//bk.GNSS = false
-		fmt.Println(bk.GNSS)
+
+		//fmt.Println(strconv.Itoa(bk.Id) + ": " + bk.IPaddr + ": " + bk.GNSS + " | " + bk.PTP)
+		//fmt.Printf("Value: %d - %t : %t\n",bk.Id, bk.GNSS, bk.PTP);
 
 
 		bk.Version = trimRightSpace(bk.Version)
+		bk.GNSS = trimRightSpace(bk.GNSS)
+		bk.PTP = trimRightSpace(bk.PTP)
 		bks = append(bks, bk)
 	}
 	CheckError(err)
@@ -988,6 +989,8 @@ func cmd_updatedev(words []string) string{
 	name := words[2]
 	version := words[3]
 	mode := words[4]
+	gnss := words[5]
+	ptp := words[6]
 	//ipaddr := r.FormValue("ipaddr")
 
 	fmt.Println(words)
@@ -999,8 +1002,8 @@ func cmd_updatedev(words []string) string{
 	defer db.Close() // close database
 
 	// update
-	updateStmt := `update "objects" set objectname=$1, version=$2, mode=$3 where id=$4`
-	_, e := db.Exec(updateStmt, name, version, mode, id)
+	updateStmt := `update "objects" set objectname=$1, version=$2, mode=$3, gnss=$4, ptp=$5 where id=$6`
+	_, e := db.Exec(updateStmt, name, version, mode, gnss, ptp, id)
 	CheckError(e)
 	fmt.Println("Updated " + mode)
 
