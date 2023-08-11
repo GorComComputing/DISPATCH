@@ -42,7 +42,11 @@
 	<!-- Bootstrap -->
 	<script src="/scripts/bootstrap/bootstrap.bundle.min.js"></script>
     	
-    	<script src="/scripts/wasm/wasm_exec.js"></script>
+    <!-- Wasm -->
+    <script src="/scripts/wasm/wasm_exec.js"></script>
+    <script src="/scripts/wasm/instantiateWasm.js"></script>
+    
+    
     	
 <!-- CSS -->    	
     	<!-- Bootstrap -->
@@ -59,45 +63,61 @@
 <body>
 <div id="application"></div>
 
-
-<!--canvas id="cnvs" width="128" height="128"></canvas>
+<canvas id="cnvs" width="640" height="480"></canvas>
 <script>
-    const canvas = document.getElementById("cnvs");
-    const ctx = canvas.getContext("2d");
-    const cnvs_size = 128;
-    const img_buf_size = cnvs_size * cnvs_size * 4;
-    ctx.clearRect(0, 0, cnvs_size, cnvs_size);
+const go = new Go();
 
-    const memory = new WebAssembly.Memory({ initial: 1 });
+const runWasm = async () => {
+  const importObject = go.importObject;
+  const wasmModule = await wasmBrowserInstantiate("wasm_GUI.wasm", importObject);
+  go.run(wasmModule.instance);
 
-    const importObject = {
-      env: {
-        buffer: memory,
-        cnvs_size: cnvs_size,
-        img_buf_size: img_buf_size,
-      }
-    };
+  // Get our exports object, with all of our exported Wasm Properties
+  const exports = wasmModule.instance.exports;
 
-    const image_data =
-      new ImageData(new Uint8ClampedArray(memory.buffer, 0, img_buf_size), cnvs_size, cnvs_size);
+  // Get our memory object from the exports
+  const memory = exports.memory;
 
-    var animation_wasm;
+  // Create a Uint8Array to give us access to Wasm Memory
+  const wasmByteMemoryArray = new Uint8Array(memory.buffer);
 
-    function animate() {
-      animation_wasm();
-      ctx.putImageData(image_data, 0, 0);
-      requestAnimationFrame(animate);
-    }
+  // Get the pointer (index) to where our graphics buffer is located in wasm linear memory
+  const graphicsBufferPointer = exports.getGraphicsBufferPointer();
+  const graphicsBufferSize = exports.getGraphicsBufferSize();
 
-    (async () => {
-      let obj = await WebAssembly.instantiateStreaming(fetch('sprite.wasm'),
-        importObject);
+  const canvasElement = document.querySelector("canvas");
+  const canvasContext = canvasElement.getContext("2d");
+  const canvasImageData = canvasContext.createImageData(canvasElement.width, canvasElement.height);
+  
+  canvasElement.onclick = function() {
+  		exports.eventClick(event.offsetX, event.offsetY);
+	}
 
-      animation_wasm = obj.instance.exports.main;
-      requestAnimationFrame(animate);
-    })();
-</script-->
+  // Clear the canvas
+  canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
+  const drawCheckerBoard = () => {
+    const checkerBoardSize = 20;
+
+    // Generate a new checkboard in wasm
+    exports.generateCheckerBoard();
+
+    // Pull out the RGBA values from Wasm memory, the we wrote to in wasm,
+    // starting at the checkerboard pointer (memory array index)
+    const imageDataArray = wasmByteMemoryArray.slice(graphicsBufferPointer, graphicsBufferPointer + graphicsBufferSize);
+    canvasImageData.data.set(imageDataArray);
+
+    canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasContext.putImageData(canvasImageData, 0, 0);
+  };
+
+  //drawCheckerBoard();
+  setInterval(() => {
+    drawCheckerBoard();
+  }, 150);
+};
+runWasm();
+</script> 
 
 <!-- My scripts --> 
 <script>

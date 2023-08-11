@@ -661,7 +661,7 @@ class Test_page extends React.Component {
 	
 	<ButtonModal caption="Wasm" color="btn-outline-warning" target="#ModalWasm">	
 		<ContainerModal caption="Wasm" id="ModalWasm" max_width="642px">
-			<Wasm />
+			{/*<Wasm />*/}
 		</ContainerModal>
 	</ButtonModal>
 
