@@ -659,8 +659,8 @@ class Test_page extends React.Component {
 	
 	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />	
 	
-	<ButtonModal caption="Wasm" color="btn-outline-warning" target="#ModalWasm">	
-		<ContainerModal caption="Wasm" id="ModalWasm" max_width="642px">
+	<ButtonModal caption="GUI" color="btn-outline-warning" target="#ModalWasm">	
+		<ContainerModal caption="GUI" id="ModalWasm" max_width="642px">
 			<Wasm />
 		</ContainerModal>
 	</ButtonModal>

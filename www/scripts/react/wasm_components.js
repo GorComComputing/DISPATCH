@@ -69,6 +69,18 @@ class Wasm extends React.Component {
   canvasElement.onclick = function() {
   		exports.eventClick(event.offsetX, event.offsetY);
 	}
+	
+  canvasElement.onmousedown = function() {
+  		exports.eventMouseDown(event.offsetX, event.offsetY);
+	}
+	
+  canvasElement.onmouseup = function() {
+  		exports.eventMouseUp(event.offsetX, event.offsetY);
+	}
+	
+  canvasElement.onmousemove = function() {
+  		exports.eventMouseMove(event.offsetX, event.offsetY);
+	}
 
   // Clear the canvas
   canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -77,7 +89,7 @@ class Wasm extends React.Component {
     const checkerBoardSize = 20;
 
     // Generate a new checkboard in wasm
-    exports.generateCheckerBoard();
+    exports.Draw();
 
     // Pull out the RGBA values from Wasm memory, the we wrote to in wasm,
     // starting at the checkerboard pointer (memory array index)
