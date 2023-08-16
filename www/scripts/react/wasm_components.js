@@ -105,12 +105,8 @@ class Wasm extends React.Component {
     drawCheckerBoard();
   }, 150);
 };
-runWasm();
-//console.log("RUN WASM")
+runWasm();   
 	}
-  
-  
-    
   
 
   render() {

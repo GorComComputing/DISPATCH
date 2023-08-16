@@ -2,6 +2,28 @@
 /*function Refresh() {
 	location.reload();
 }*/
+
+
+
+ function  log(s) {
+  console.log('Log from JS: ['+s+']');
+
+    var body2 = "000";
+   
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+      	if (this.readyState == 4 && this.status == 200) {
+        	console.log(xhttp.responseText);
+            body2 = xhttp.responseText;
+        }
+      };
+      xhttp.withCredentials = true;
+      xhttp.open("GET", "http://localhost:8085/api?cmd=get_msg", false);
+      xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencode');
+	  xhttp.send();
+     
+      return {msg: body2};
+}
 		
 
 // Обновляет информацию (для запросов каждые 15 секунд)		
