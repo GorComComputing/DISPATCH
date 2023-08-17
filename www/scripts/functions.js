@@ -5,24 +5,22 @@
 
 
 
- function  log(s) {
-  console.log('Log from JS: ['+s+']');
-
-    var body2 = "000";
-   
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-      	if (this.readyState == 4 && this.status == 200) {
-        	console.log(xhttp.responseText);
-            body2 = xhttp.responseText;
+ function  HttpRequest(s) {
+  	//console.log('Log from JS: ['+s+']');
+	var response = "";
+	var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    	if (this.readyState == 4 && this.status == 200) {
+        	//console.log(xhttp.responseText);
+            response = xhttp.responseText;
         }
       };
       xhttp.withCredentials = true;
-      xhttp.open("GET", "http://localhost:8085/api?cmd=get_msg", false);
+      xhttp.open("GET", s, false);
       xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencode');
 	  xhttp.send();
      
-      return {msg: body2};
+      return {response: response};
 }
 		
 

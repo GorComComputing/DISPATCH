@@ -99,11 +99,19 @@ class Wasm extends React.Component {
     canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
     canvasContext.putImageData(canvasImageData, 0, 0);
   };
+  
+   const keyDown = (e) => {
+   	console.log(e.key);
+   	exports.keyDown(e.keyCode);
+   	
+   }
 
   //drawCheckerBoard();
   setInterval(() => {
     drawCheckerBoard();
   }, 150);
+  
+  addEventListener("keydown", keyDown);
 };
 runWasm();   
 	}
@@ -112,7 +120,7 @@ runWasm();
   render() {
         return (
         	<div id="body_wasm">
-        		<canvas id="cnvs" width="640" height="480"></canvas>
+        		<canvas id="cnvs" width="1024" height="768"></canvas>
         	</div>
         );
 
