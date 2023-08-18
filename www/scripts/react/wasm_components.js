@@ -103,7 +103,6 @@ class Wasm extends React.Component {
    const keyDown = (e) => {
    	console.log(e.key);
    	exports.keyDown(e.keyCode);
-   	
    }
 
   //drawCheckerBoard();
