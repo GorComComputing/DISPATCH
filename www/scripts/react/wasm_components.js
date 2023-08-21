@@ -108,7 +108,7 @@ class Wasm extends React.Component {
   //drawCheckerBoard();
   setInterval(() => {
     drawCheckerBoard();
-  }, 150);
+  }, 50);
   
   addEventListener("keydown", keyDown);
 };
