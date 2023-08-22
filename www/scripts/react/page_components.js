@@ -659,11 +659,11 @@ class Test_page extends React.Component {
 	
 	<ButtonSimple caption="Send JSON" onClick={this.SendJSON} color="btn-outline-danger" />	
 	
-	<ButtonModal caption="GUI" color="btn-outline-warning" target="#ModalWasm">	
+	{/*<ButtonModal caption="GUI" color="btn-outline-warning" target="#ModalWasm">	
 		<ContainerModal caption="GUI" id="ModalWasm" max_width="1026px">
 			<Wasm />
 		</ContainerModal>
-	</ButtonModal>
+	</ButtonModal>*/}
 
 	<MsgLine message="Тест" color="bg-warning" /> 
 	

@@ -86,7 +86,7 @@ class Wasm extends React.Component {
   canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
   const drawCheckerBoard = () => {
-    const checkerBoardSize = 20;
+    //const checkerBoardSize = 20;
 
     // Generate a new checkboard in wasm
     exports.Draw();
@@ -108,7 +108,7 @@ class Wasm extends React.Component {
   //drawCheckerBoard();
   setInterval(() => {
     drawCheckerBoard();
-  }, 50);
+  }, 150);
   
   addEventListener("keydown", keyDown);
 };
@@ -119,7 +119,7 @@ runWasm();
   render() {
         return (
         	<div id="body_wasm">
-        		<canvas id="cnvs" width="1024" height="768"></canvas>
+        		<canvas id="cnvs" width="1900" height="1060"></canvas>
         	</div>
         );
 

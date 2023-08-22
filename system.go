@@ -981,6 +981,42 @@ func curl(words []string) (string, map[string]any) {
 	return output, result 
 }
 
+
+// команда curl_get
+func cmd_curl_get(words []string) string {
+	var output string
+
+	if len(words) > 2 {
+		for i := 2; i < len(words); i++ {
+			words[1] += "%20" + words[i]
+		}
+	}
+
+	req, err := http.NewRequest("GET", words[1], nil)
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+	defer resp.Body.Close()
+
+	body_resp, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		output = "Request FAIL\n"
+		return output
+	}
+	
+	output = string(body_resp)
+	return output 
+}
+
+
 // Update device handler
 func cmd_updatedev(words []string) string{
 	var output string
