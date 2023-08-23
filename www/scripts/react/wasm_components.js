@@ -108,7 +108,7 @@ class Wasm extends React.Component {
   //drawCheckerBoard();
   setInterval(() => {
     drawCheckerBoard();
-  }, 150);
+  }, 150); // 25
   
   addEventListener("keydown", keyDown);
 };
@@ -119,7 +119,7 @@ runWasm();
   render() {
         return (
         	<div id="body_wasm">
-        		<canvas id="cnvs" width="1900" height="1060"></canvas>
+        		<canvas id="cnvs" width="1920" height="1080"></canvas>
         	</div>
         );
 
