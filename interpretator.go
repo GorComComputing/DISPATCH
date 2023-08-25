@@ -46,6 +46,7 @@ var cmd =  map[string]Cmd{
 	"del_evnt": Cmd{addr: cmd_delete_event, descr: "Delete event from data base from client"},
 	"upd_evnt": Cmd{addr: cmd_update_event, descr: "Update event in data base from client"},
 	
+	"read": Cmd{addr: cmd_read, descr: "Read file"},
 }
 
 

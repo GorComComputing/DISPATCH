@@ -7,6 +7,8 @@ import (
     "net/http"
     "io/ioutil"
     "unicode"
+    "os"
+    //"io"
     
     "bytes"
     "encoding/json"
@@ -1046,6 +1048,84 @@ func cmd_updatedev(words []string) string{
 	output = "Updated"
 	
 	return output
+}
+
+
+// Read file handler
+func cmd_read(words []string) string{
+	/*var output string
+	
+	// open the file
+	file, err := os.Open(words[1])
+	
+	//handle errors while opening
+	if err != nil {
+		log.Fatalf("Error when opening file: %s", err)
+	}
+
+	fileScanner := bufio.NewScanner(file)*/
+	
+	dat, _ := os.ReadFile(words[1])
+	return string(dat)
+}
+
+
+// handle Сохраняет файл
+func save(w http.ResponseWriter, r *http.Request) {
+	//var output string
+	fmt.Println(r)
+	fmt.Println(r.Body)
+	text, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Fprintf(w, "Err body")
+        	//output = "Unable to open file: " + err.Error() + "\n"
+        	return //output
+    	}
+	//strings.SplitAfter(words[1], "=")[1]
+	fmt.Println(string(text))	
+
+				
+    	file, err := os.OpenFile("./files/tmp.go", os.O_TRUNC | os.O_WRONLY, 0600)
+    	if err != nil {
+    		fmt.Fprintf(w, "Err")
+        	//output = "Unable to open file: " + err.Error() + "\n"
+        	return //output
+    	}
+    	defer file.Close()
+
+
+
+	if string(text) != "" { 
+    	if _, err = file.WriteString(string(text)); err != nil {
+    		fmt.Fprintf(w, "Err body")
+    		//output = "Unable to write string: " + err.Error() + "\n"
+    		return //output
+    	}
+    	}
+    	
+
+    	/*
+    	// перенести из tmp в основной файл
+    	cmd := exec.Command("cp", "./files/tmp.conf", "/etc/pzg-chrony.conf")
+	_, err = cmd.Output()
+	if err != nil {
+		output = "Could not back copy: " + err.Error() + "\n"
+    		return output
+	}
+    	//fmt.Println("Saved OK")
+    	cmd_restart(words)
+    	
+    	_ , File := scan()
+    	
+    	//fmt.Fprintf(w, File)
+    	//fmt.Println(File)
+    	//messages <- string("Config-файл Chrony сохранен<br/>Chrony запущен")
+    	File = fmt.Sprintf("%s%s", File, "\n")
+    	*/
+    	//output += "Saved OK"
+    	fmt.Fprintf(w, "Saved OK")
+    	
+    	//return output //File
 }
 
 

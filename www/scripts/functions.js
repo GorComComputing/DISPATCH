@@ -5,7 +5,7 @@
 
 
 
- function  HttpRequest(s) {
+ function  HttpRequest(s, body) {
   	//console.log('Log from JS: ['+s+']');
 	var response = "";
 	var xhttp = new XMLHttpRequest();
@@ -15,10 +15,10 @@
             response = xhttp.responseText;
         }
       };
-      xhttp.withCredentials = true;
-      xhttp.open("GET", s, false);
-      xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencode');
-	  xhttp.send();
+      //xhttp.withCredentials = true;
+      xhttp.open("POST", s, false);
+      //xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencode');
+	  xhttp.send(body);
      
       return {response: response};
 }
