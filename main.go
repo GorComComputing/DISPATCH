@@ -66,7 +66,7 @@ func main() {
 	
 	// start shell
 	for {  // exit_status
-		fmt.Print("WS> ")
+		fmt.Print("DISPATCH> ")
 		// ввод строки с пробелами
     		scanner := bufio.NewScanner(os.Stdin)
     		scanner.Scan()

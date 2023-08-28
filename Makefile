@@ -1,6 +1,6 @@
 .PHONY: main
 main: *.go deps
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o WebServer .
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o DISPATCH .
 
 
 .PHONY:deps
