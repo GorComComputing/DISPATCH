@@ -1072,6 +1072,7 @@ func cmd_read(words []string) string{
 
 // handle Сохраняет файл
 func save(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
 	//var output string
 	fmt.Println(r)
 	fmt.Println(r.Body)
@@ -1085,7 +1086,7 @@ func save(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(string(text))	
 
 				
-    	file, err := os.OpenFile("./files/tmp.go", os.O_TRUNC | os.O_WRONLY, 0600)
+    	file, err := os.OpenFile(name, os.O_TRUNC | os.O_CREATE | os.O_WRONLY, 0644)
     	if err != nil {
     		fmt.Fprintf(w, "Err")
         	//output = "Unable to open file: " + err.Error() + "\n"

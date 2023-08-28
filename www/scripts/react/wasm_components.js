@@ -89,7 +89,7 @@ class Wasm extends React.Component {
     //const checkerBoardSize = 20;
 
     // Generate a new checkboard in wasm
-    exports.Draw();
+    exports.eventDraw();
 
     // Pull out the RGBA values from Wasm memory, the we wrote to in wasm,
     // starting at the checkerboard pointer (memory array index)
@@ -100,9 +100,9 @@ class Wasm extends React.Component {
     canvasContext.putImageData(canvasImageData, 0, 0);
   };
   
-   const keyDown = (e) => {
+   const eventKeyDown = (e) => {
    	console.log(e.key);
-   	exports.keyDown(e.keyCode);
+   	exports.eventKeyDown(e.keyCode);
    }
 
   //drawCheckerBoard();
@@ -110,7 +110,7 @@ class Wasm extends React.Component {
     drawCheckerBoard();
   }, 150); // 25
   
-  addEventListener("keydown", keyDown);
+  addEventListener("keydown",  eventKeyDown);
 };
 runWasm();   
 	}
