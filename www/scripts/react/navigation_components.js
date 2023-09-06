@@ -64,13 +64,13 @@ class NavBar extends React.Component {
         <li className="nav-item">
           <ButtonToggle caption="Терминал" color="btn-outline-secondary" target="#Terminal"/>
         </li>
-        <li className="nav-item">
+        {/*<li className="nav-item">
         <ButtonModal caption="GUI" color="btn-outline-warning" target="#ModalWasm">	
 		<ContainerModal caption="GUI" id="ModalWasm" max_width="1026px">
 			<Wasm />
 		</ContainerModal>
 	</ButtonModal>
-	</li>
+	</li>*/}
         {/*<!--li className="nav-item dropdown">
           <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Выпадающий список
